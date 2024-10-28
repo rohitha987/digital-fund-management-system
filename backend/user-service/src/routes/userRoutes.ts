@@ -1,14 +1,18 @@
 import express from "express";
-import { getAllUsers, getUserById, registerUser } from "../controllers/userController";
+import { getAllUsers, getUserByEmail, getUserById, registerUser } from "../controllers/userController";
 
-const router=express.Router();
+const router = express.Router();
 
-router.post('/register', registerUser)
+// Route for user registration
+router.post('/register', registerUser);
 
-router.get('/all', getAllUsers)
+// Route for getting all users
+router.get('/all', getAllUsers);
 
-router.get('/:userId', getUserById)
+// Route for getting a user by their ID
+router.get('/:userId', getUserById);
 
-
+// Route for getting a user by their email
+router.get('/email/:userEmail', getUserByEmail); // Change the route to avoid conflicts
 
 export default router;

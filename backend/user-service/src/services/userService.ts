@@ -1,6 +1,8 @@
 import User from '../models/User';
 
 class UserService {
+
+  
   async register(userData: any) {
     const user = new User(userData);
     return user.save();
@@ -17,6 +19,10 @@ class UserService {
   async getUserById(userId: string) {
     return User.findOne({ userId });
   }
+
+  async getUserByEmail(userEmail: string) {
+    return User.findOne({ userEmail});
+}
   async searchGroup(groupId: string) {
     // Logic to search for a group (Placeholder)
   }
