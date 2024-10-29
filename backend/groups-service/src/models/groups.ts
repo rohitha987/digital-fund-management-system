@@ -1,4 +1,3 @@
-import { Double, UUID } from "mongodb";
 import mongoose,{Schema,Document} from "mongoose";
 
 interface IGroup extends Document{
@@ -6,12 +5,12 @@ interface IGroup extends Document{
     groupName:string;
     groupType:string;
     interest: number;
-    organizerId:UUID;
+    organizerId:string;
     members:number;
     duration:number;
     totalAmount:number;
     ticketValue:number;
-    participants:UUID[];
+    participants:string[];
     description:string;
     createdAt:Date;
     updatedAt:Date;
@@ -22,18 +21,17 @@ const groupSchema:Schema<IGroup> = new Schema({
     groupName:{type:String,required:true,unique:true},
     groupType:{type:String,required:true},
     interest:{type:Number,required:true},
-    organizerId:{type:UUID,required:true},
+    organizerId:{type:String,required:true},
     members:{type:Number,required:true},
     duration:{type:Number,required:true},
     totalAmount:{type:Number,required:true},
     ticketValue:{type:Number,required:true},
-    participants:{type:[UUID],required:true,unique:true},
-    description:{type:String,required:true},
-    createdAt:{type:Date,required:true,default:Date.now()},
-    updatedAt:{type:Date,required:true,default:Date.now()},
+    participants:{type:[String]},
+    description:{type:String,required:true}
 },{
     collection:"groups",
-    versionKey:false
+    versionKey:false,
+    timestamps:true
 })
 
 const Group = mongoose.model<IGroup>("Group",groupSchema);

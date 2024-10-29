@@ -1,16 +1,18 @@
 import { Router } from "express";
-import { createGroup,getAllGroups,getByGroupName,updateGroup,deleteGroup } from "../controllers/grpController";
+import { createGroup,getAllGroups,getByGroupId,updateGroup,deleteGroup, addParticipant } from "../controllers/grpController";
 
 const router = Router();
 
-router.post('/grp',createGroup);
+router.post('/',createGroup)
 
-router.get('/', getAllGroups);
+router.get('/all', getAllGroups);
 
-router.get('/grp/:groupName',getByGroupName);
+router.get('/:groupId',getByGroupId as any);
 
-router.put('/grp/:groupName', updateGroup);
+router.put('/:groupName', updateGroup);
 
-router.delete('/grp/:groupName', deleteGroup);
+router.delete('/:groupName', deleteGroup);
+
+router.post('/:groupId/participants', addParticipant as any);
 
 export default router;

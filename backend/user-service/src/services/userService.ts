@@ -1,8 +1,9 @@
+import axios from 'axios';
 import User from '../models/User';
 
 class UserService {
 
-  
+
   async register(userData: any) {
     const user = new User(userData);
     return user.save();
@@ -21,8 +22,8 @@ class UserService {
   }
 
   async getUserByEmail(userEmail: string) {
-    return User.findOne({ userEmail});
-}
+    return User.findOne({ userEmail });
+  }
   async searchGroup(groupId: string) {
     // Logic to search for a group (Placeholder)
   }
@@ -39,6 +40,23 @@ class UserService {
     // Logic to get all transactions (Placeholder)
   }
 
+  async getListofGroups(userId: string) {
+    const userGroupIds = await User.findOne({ userId }).select("groupIds");
+    if (!userGroupIds) {
+      return null;
+    }
+    var result: String[] = [];
+    for (const element of userGroupIds.groupIds) {
+      try {
+        const response = await axios.get(`http://localhost:3001/api/groups/${element}`)
+        result.push(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    console.log(result);
+    return result;
+  }
   // Other methods as needed
 }
 

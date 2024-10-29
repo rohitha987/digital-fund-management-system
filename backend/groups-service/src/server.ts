@@ -2,7 +2,7 @@ import app from "./app";
 import mongoose from "mongoose";
 import 'dotenv/config';
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 mongoose.connect(process.env.mongo_uri as string)
 .then(() => {
@@ -12,5 +12,5 @@ mongoose.connect(process.env.mongo_uri as string)
 });
 
 app.listen(PORT, () => {
-  console.log('Server is running on port 3000');
+  console.log('Server is running on port 3001');
 });

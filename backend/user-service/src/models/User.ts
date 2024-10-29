@@ -25,7 +25,7 @@ const userSchema : Schema = new Schema({
     userMobileNum: {type: String, required: true},
     userAddress: {type: String, required: true},
     userRole: {type: String, required: true},
-    groupsIds: [{type: String }],
+    groupIds: {type: [String] },
 
 });
 

@@ -20,9 +20,12 @@ export const getAllGroups = async (req:Request, res:Response) => {
     }
 }
 
-export const getByGroupName =async (req:Request,res:Response)=>{
+export const getByGroupId =async (req:Request,res:Response)=>{
     try{
-        const group = await Group.findOne({groupName:req.params.groupName});
+        const group = await Group.findOne({groupId:req.params.groupId});
+        if(!group){
+            return res.status(404).json({message:"Group not found"});
+        }
         res.status(200).json(group);
     }catch(error){
         res.status(400).json({message:error});
@@ -46,3 +49,17 @@ export const deleteGroup = async(req:Request,res:Response)=>{
         res.status(400).json({message:error});
     }
 } 
+
+export const addParticipant = async(req:Request, res:Response)=>{
+    try{
+        const group = await Group.findOne({groupName:req.params.groupId});
+        if(!group){
+            return res.status(404).json({message:"Group not found"});
+        }
+        group.participants.push(req.body.userId);
+        const updatedGroup = await group.save();
+        res.status(200).json(updatedGroup);
+    }catch(error){
+        res.status(400).json({message:error});
+    }
+}
