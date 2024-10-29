@@ -13,6 +13,6 @@ router.put('/:groupName', updateGroup);
 
 router.delete('/:groupName', deleteGroup);
 
-router.post('/:groupId/participants', addParticipant as any);
+router.get('/:groupId/participants/:userId', addParticipant as any);
 
 export default router;

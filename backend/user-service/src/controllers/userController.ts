@@ -7,6 +7,7 @@ const userService = new UserService();
 export const registerUser: RequestHandler = async (req: Request, res: Response) => {
     try {
         const user = await userService.register(req.body);
+        console.log(user);
         res.status(201).json(user);
     } catch (error) {
         const errorMessage = (error as Error).message;

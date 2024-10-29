@@ -52,11 +52,12 @@ export const deleteGroup = async(req:Request,res:Response)=>{
 
 export const addParticipant = async(req:Request, res:Response)=>{
     try{
-        const group = await Group.findOne({groupName:req.params.groupId});
+        const group = await Group.findOne({groupId:req.params.groupId});
         if(!group){
             return res.status(404).json({message:"Group not found"});
         }
-        group.participants.push(req.body.userId);
+        console.log(req.params.userId);
+        group.participants.push(req.params.userId);
         const updatedGroup = await group.save();
         res.status(200).json(updatedGroup);
     }catch(error){

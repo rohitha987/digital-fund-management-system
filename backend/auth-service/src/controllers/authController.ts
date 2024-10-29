@@ -1,21 +1,17 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
-import axios from 'axios';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { UserRole } from '../models/User';
+import axios from 'axios';
 
-const USER_SERVICE_URL = 'http://localhost:3000/api/users/register';
+const USER_SERVICE_URL = `http://localhost:3002/api/users/register`;
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'; // Use your own secret
 
-// Register function without token generation
 export const register: RequestHandler = async (req: Request, res: Response) => {
-    try {
-        const { userId, userName, userEmail, password, userMobileNum, userAddress, userRole } = req.body;
+    const { userId, userName, userEmail, password, userMobileNum, userAddress, userRole } = req.body;
 
-        // Hash the password before sending to the user-service
+    try {
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create user data to send to user-service
         const userData = {
             userId,
             userName,
@@ -26,16 +22,21 @@ export const register: RequestHandler = async (req: Request, res: Response) => {
             userRole,
         };
 
-        // Send a POST request to user-service to register the new user
         const response = await axios.post(USER_SERVICE_URL, userData);
-
         if (response.status === 201) {
             res.status(201).json({ message: 'User registered successfully' });
         } else {
             res.status(response.status).json({ message: response.data.message });
         }
-    } catch (error: any) {
-        res.status(500).json({ message: 'Error registering user', error: error.message });
+    } catch (error: unknown) {
+        // Use type assertion to access properties
+        if (axios.isAxiosError(error)) {
+            console.error('Error during registration:', error.response?.data || error.message);
+            res.status(error.response?.status || 500).json({ message: error.response?.data?.message || 'Error registering user' });
+        } else {
+            console.error('Unexpected error:', error);
+            res.status(500).json({ message: 'Error registering user', error: 'Internal Server Error' });
+        }
     }
 };
 
@@ -47,7 +48,7 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
         console.log(`Attempting to fetch user with email: ${userEmail}`);
 
         // Fetch user data from user-service
-        const response = await axios.get(`http://localhost:3000/api/users/email/${userEmail}`);
+        const response = await axios.get(`http://localhost:3002/api/users/email/${userEmail}`);
 
         if (response.status === 200) {
             const user = response.data;
