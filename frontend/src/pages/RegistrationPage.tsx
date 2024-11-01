@@ -12,8 +12,44 @@ const RegistrationPage: React.FC = () => {
     userRole: 'participant'
   });
 
+  const [errors, setErrors] = useState({
+    userId: '',
+    userName: '',
+    userEmail: '',
+    password: '',
+    userMobileNum: '',
+    userAddress: ''
+  });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
+
+  const validateField = (name: string, value: string) => {
+    let errorMsg = '';
+    switch (name) {
+      case 'userId':
+        if (!value.trim()) errorMsg = 'User ID is required.';
+        break;
+      case 'userName':
+        if (!value.trim()) errorMsg = 'Name is required.';
+        break;
+      case 'userEmail':
+        if (!/\S+@\S+\.\S+/.test(value)) errorMsg = 'Email is invalid.';
+        break;
+      case 'password':
+        if (value.length < 6) errorMsg = 'Password should be at least 6 characters.';
+        break;
+      case 'userMobileNum':
+        if (!/^\d{10}$/.test(value)) errorMsg = 'Mobile number must be a 10-digit number.';
+        break;
+      case 'userAddress':
+        if (!value.trim()) errorMsg = 'Address is required.';
+        break;
+      default:
+        break;
+    }
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMsg }));
+    return errorMsg === '';
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -21,33 +57,38 @@ const RegistrationPage: React.FC = () => {
       ...prevData,
       [name]: value,
     }));
+    validateField(name, value);  // Validate each field on change
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      // Log form data before sending
-      console.log('Form data being submitted:', formData);
+    // Check if all fields are valid
+    const isValid = Object.keys(formData).every((key) =>
+      validateField(key, formData[key as keyof typeof formData])
+    );
 
+    if (!isValid) {
+      setError('Please correct the errors in the form.');
+      return;
+    }
+
+    try {
+      console.log('Form data being submitted:', formData);
       const response = await axios.post('http://127.0.0.1:3000/api/auth/register', formData, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true,
-    });
-      console.log('Response from server:', response.data); // Log server response
+      });
+      console.log('Response from server:', response.data);
 
       setSuccess(true);
       setError(null);
     } catch (err) {
-      // Log the full error object for debugging
       console.error('Error during registration:', err);
-
       if (axios.isAxiosError(err)) {
-        // This is an Axios error
         const errorMessage = err.response?.data.message || 'Registration failed. Please try again.';
-        console.error('Error message from server:', errorMessage); // Log server error message
+        console.error('Error message from server:', errorMessage);
         setError(errorMessage);
       } else {
-        // This is a different kind of error
         setError('Registration failed. Please try again.');
       }
       setSuccess(false);
@@ -61,106 +102,25 @@ const RegistrationPage: React.FC = () => {
         {success && <div className="text-green-500 mb-4">Registration successful!</div>}
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-sm font-semibold mb-2" htmlFor="userId">
-              User ID
-            </label>
-            <input
-              type="text"
-              name="userId"
-              id="userId"
-              value={formData.userId}
-              onChange={handleChange}
-              required
-              className="w-full p-2 border rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-semibold mb-2" htmlFor="userName">
-              Name
-            </label>
-            <input
-              type="text"
-              name="userName"
-              id="userName"
-              value={formData.userName}
-              onChange={handleChange}
-              required
-              className="w-full p-2 border rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-semibold mb-2" htmlFor="userEmail">
-              Email
-            </label>
-            <input
-              type="email"
-              name="userEmail"
-              id="userEmail"
-              value={formData.userEmail}
-              onChange={handleChange}
-              required
-              className="w-full p-2 border rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-semibold mb-2" htmlFor="password">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="w-full p-2 border rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-semibold mb-2" htmlFor="userMobileNum">
-              Mobile Number
-            </label>
-            <input
-              type="text"
-              name="userMobileNum"
-              id="userMobileNum"
-              value={formData.userMobileNum}
-              onChange={handleChange}
-              required
-              className="w-full p-2 border rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-semibold mb-2" htmlFor="userAddress">
-              Address
-            </label>
-            <input
-              type="text"
-              name="userAddress"
-              id="userAddress"
-              value={formData.userAddress}
-              onChange={handleChange}
-              required
-              className="w-full p-2 border rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-semibold mb-2" htmlFor="userRole">
-              Role
-            </label>
-            <select
-              name="userRole"
-              id="userRole"
-              value={formData.userRole}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-md"
-            >
-              <option value="participant">Participant</option>
-              <option value="organizer">Organizer</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
+          {Object.keys(formData).map((field) => (
+            <div key={field} className="mb-4">
+              <label className="block text-sm font-semibold mb-2" htmlFor={field}>
+                {field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')}
+              </label>
+              <input
+                type={field === 'password' ? 'password' : 'text'}
+                name={field}
+                id={field}
+                value={formData[field as keyof typeof formData]}
+                onChange={handleChange}
+                required
+                className={`w-full p-2 border rounded-md ${errors[field as keyof typeof errors] ? 'border-red-500' : ''}`}
+              />
+              {errors[field as keyof typeof errors] && (
+                <p className="text-red-500 text-sm">{errors[field as keyof typeof errors]}</p>
+              )}
+            </div>
+          ))}
           <button
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"

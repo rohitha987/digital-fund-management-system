@@ -75,3 +75,19 @@ export const getListOfGroups = async(req:Request, res:Response)=>{
       res.status(400).json({message:error});
   }
 }
+
+export const editUserProfile: RequestHandler = async (req: Request, res: Response) => {
+    try {
+        const userEmail = req.params.userEmail; // Get userId from the URL parameters
+        const userData = req.body; // Get updated user data from the request body
+        
+        // Update the user using the userService
+        const updatedUser = await userService.editUserProfile(userEmail, userData);
+        console.log(updatedUser);
+        // Return the updated user data
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+        res.status(500).json({ message: errorMessage });
+    }
+};
