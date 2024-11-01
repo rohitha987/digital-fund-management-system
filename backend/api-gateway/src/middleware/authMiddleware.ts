@@ -1,17 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
- 
+import { NextFunction } from 'express';
 import { UserRole } from '../models/User';
 import { verifyToken } from '../utils/jwtUtils';
- 
- 
+import { Request,Response } from 'express';
  
 interface AuthRequest extends Request {
  
  user?: { userId: string; userRole: UserRole };
  
-}
- 
- 
+} 
  
 // Middleware to authenticate JWT and set req.user
  
@@ -40,9 +36,7 @@ export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunct
  
  }
  
-};
- 
- 
+}; 
  
 // Middleware to authorize based on user roles
  

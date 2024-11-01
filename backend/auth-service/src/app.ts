@@ -11,6 +11,16 @@ const app = express();
 
 // Middleware
 app.use(cors({
+    origin: 'http://localhost:3002', // URL of your frontend
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Body parser middleware
+
+// Middleware
+app.use(cors({
     origin: 'http://localhost:3005', // URL of your frontend
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -24,7 +34,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Connect to MongoDB
 
 // Routes
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Connect to MongoDB
+
+// Routes
 app.use('/api/auth', authRoutes);
+app.use(cors())
 
 // Preflight request handler
 app.options('*', cors());

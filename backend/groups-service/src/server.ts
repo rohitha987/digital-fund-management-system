@@ -12,5 +12,5 @@ mongoose.connect(process.env.mongo_uri as string)
 });
 
 app.listen(PORT, () => {
-  console.log('Server is running on port',PORT);
+  console.log('groups-service is running on port',PORT);
 });
