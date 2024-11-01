@@ -24,22 +24,15 @@ class UserService {
   async getUserByEmail(userEmail: string) {
     return User.findOne({ userEmail });
   }
-  async searchGroup(groupId: string) {
-    // Logic to search for a group (Placeholder)
-  }
 
-  async viewGroupDetails(groupId: string) {
-    // Logic to view group details (Placeholder)
+  async getUsernameById(userId: string) {
+    const user = await User.findById(userId).select('userName'); // Adjust the field name as per your schema
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user.userName;
   }
-
-  async requestJoinGroup(userId: string, groupId: string) {
-    // Logic to request joining a group (Placeholder)
-  }
-
-  async getAllTransactions(userId: string) {
-    // Logic to get all transactions (Placeholder)
-  }
-
+  
   async getListofGroups(userId: string) {
     const userGroupIds = await User.findOne({ userId }).select("groupIds");
     if (!userGroupIds) {
@@ -58,6 +51,34 @@ class UserService {
     return result;
   }
   // Other methods as needed
+
+  async editUserProfile(userEmail: string, updatedData: any): Promise<any> {
+    try {
+        // Log the updated data for debugging purposes
+        console.log('Updated Data:', updatedData);
+        
+        // Use findOneAndUpdate to find the user by email and update their information
+        const updatedUser = await User.findOneAndUpdate(
+            { userEmail: userEmail },
+            { $set: updatedData }, // Use $set to update only specified fields
+            { new: true, runValidators: true } // Return the updated document and run validators
+        );
+
+        // Check if a user was found and updated
+        if (!updatedUser) {
+            throw new Error('User not found');
+        }
+
+        return updatedUser; // Return the updated user document
+    } catch (error) {
+        console.error('Error updating user profile:', error);
+        throw new Error('Error updating user profile');
+    }
 }
+}
+
+
+
+
 
 export default UserService;
