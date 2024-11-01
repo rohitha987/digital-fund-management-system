@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({
     userEmail: '',
     password: '',
   });
-
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -18,31 +20,67 @@ const LoginPage: React.FC = () => {
     }));
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    navigate('/login');
+};
+
+  const fetchUserData = async () => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const userResponse = await axios.get(
+          `http://localhost:3000/api/users/email/${formData.userEmail}`,
+          {
+            headers: { 'Content-Type': 'application/json' , Authorization: `Bearer ${token}` },
+          }
+        );
+        console.log('User data:', userResponse.data);
+
+        // Navigate based on user role
+        if (userResponse.data.userRole === 'participant') {
+          navigate('/');
+        } else if (userResponse.data.userRole === 'organizer') {
+          navigate('/organizer/home');
+        } else if (userResponse.data.userRole === 'admin') {
+          navigate('/admin/dashboard');
+        }
+      } catch (error) {
+        console.error('Failed to fetch user data', error);
+        setError('Failed to fetch user data.');
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Log form data before sending
       console.log('Form data being submitted:', formData);
 
-      const response = await axios.post('http://127.0.0.1:3000/api/auth/login', formData, {
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true,
-      });
-      console.log('Response from server:', response.data); // Log server response
+      const response = await axios.post(
+        'http://127.0.0.1:3000/api/auth/login',
+        formData,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true,
+        }
+      );
+      console.log('Response from server:', response.data);
 
-      setSuccess(true);
-      setError(null);
+      if (response.data.token) {
+        localStorage.setItem('authToken', response.data.token); // Store token
+        setSuccess(true);
+        setError(null);
+        await fetchUserData(); // Fetch user data right after login
+      }
     } catch (err) {
-      // Log the full error object for debugging
       console.error('Error during login:', err);
 
       if (axios.isAxiosError(err)) {
-        // This is an Axios error
         const errorMessage = err.response?.data.message || 'Login failed. Please try again.';
-        console.error('Error message from server:', errorMessage); // Log server error message
+        console.error('Error message from server:', errorMessage);
         setError(errorMessage);
       } else {
-        // This is a different kind of error
         setError('Login failed. Please try again.');
       }
       setSuccess(false);
