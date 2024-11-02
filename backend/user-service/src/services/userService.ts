@@ -33,15 +33,15 @@ class UserService {
     return user.userName;
   }
   
-  async getListofGroups(userId: string) {
-    const userGroupIds = await User.findOne({ userId }).select("groupIds");
+  async getListofGroups(userEmail: string) {
+    const userGroupIds = await User.findOne({ userEmail }).select("groupIds");
     if (!userGroupIds) {
       return null;
     }
     var result: String[] = [];
     for (const element of userGroupIds.groupIds) {
       try {
-        const response = await axios.get(`http://localhost:3001/api/groups/${element}`)
+        const response = await axios.get(`http://localhost:3003/api/groups/${element}`)
         result.push(response.data);
       } catch (error) {
         console.log(error);

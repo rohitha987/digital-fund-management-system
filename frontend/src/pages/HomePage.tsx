@@ -10,7 +10,7 @@ const HomePage: React.FC = () => {
                 style={{ backgroundImage: `url(${image})` }} // Use the imported image
             >
                 <div className="flex items-center justify-center h-full bg-black bg-opacity-50">
-                    <h2 className="text-4xl text-white font-bold">DFCM</h2>
+                    <h2 className="text-4xl text-white font-bold">Digital Fund Management System</h2>
                 </div>
             </header>
 

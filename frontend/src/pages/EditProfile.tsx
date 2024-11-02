@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { FaSave } from 'react-icons/fa';
 
 const EditProfile: React.FC = () => {
     const { user, setUser } = useAuth();
@@ -15,7 +16,7 @@ const EditProfile: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     if (!user) {
-        return <div>No user data found.</div>;
+        return <div className="text-center text-lg font-semibold text-gray-600">No user data found.</div>;
     }
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,10 +56,11 @@ const EditProfile: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-                <h2 className="text-2xl font-bold text-center mb-6">Edit Profile</h2>
-                {error && <div className="text-red-500 mb-4">{error}</div>}
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-red-200 to-blue-200">
+            <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+                <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Edit Your Profile</h2>
+                {error && <div className="text-red-500 mb-4 text-center">{error}</div>}
+
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label className="block text-sm font-semibold mb-2" htmlFor="userMobileNum">
@@ -71,7 +73,7 @@ const EditProfile: React.FC = () => {
                             value={formData.userMobileNum}
                             onChange={handleChange}
                             required
-                            className="w-full p-2 border rounded-md"
+                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                     <div className="mb-4">
@@ -85,13 +87,14 @@ const EditProfile: React.FC = () => {
                             value={formData.userAddress}
                             onChange={handleChange}
                             required
-                            className="w-full p-2 border rounded-md"
+                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                     <button
                         type="submit"
-                        className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+                        className="flex items-center justify-center mt-4 w-full bg-red-700 text-white p-3 rounded-lg shadow-md hover:bg-red-500 transition-colors duration-200"
                     >
+                        <FaSave className="mr-2" />
                         Save Changes
                     </button>
                 </form>

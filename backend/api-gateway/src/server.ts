@@ -39,7 +39,7 @@ app.use(
 app.use(
     '/api/groups',
     authenticateJWT,
-    authorizeRole([UserRole.ADMIN, UserRole.ORGANIZER]),
+    authorizeRole([UserRole.PARTICIPANT, UserRole.ORGANIZER]),
     createProxyMiddleware({ target: 'http://localhost:3003/api/groups', changeOrigin: true })
 );
 

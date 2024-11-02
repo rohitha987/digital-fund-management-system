@@ -65,7 +65,7 @@ export const getUserByEmail: RequestHandler = async (req: Request, res: Response
 
 export const getListOfGroups = async(req:Request, res:Response)=>{
   try{
-      const groups= await userService.getListofGroups(req.params.userId);
+      const groups= await userService.getListofGroups(req.params.userEmail);
       if(!groups){
         res.status(404).json({message:"Group not found"});
       }

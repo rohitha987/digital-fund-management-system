@@ -7,6 +7,7 @@ interface User {
     userRole: string;
     userMobileNum: string;
     userAddress: string;
+    groupIds: string[]
 }
 
 interface AuthContextType {
@@ -19,9 +20,11 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
 
+    
     const login = async (email: string, password: string) => {
         try {
             const response = await axios.post('http://localhost:3000/api/auth/login', {

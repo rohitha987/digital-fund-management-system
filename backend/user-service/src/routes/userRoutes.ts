@@ -15,7 +15,7 @@ router.get('/:userId', getUserById);
 // Route for getting a user by their email
 router.get('/email/:userEmail', getUserByEmail); // Change the route to avoid conflicts
 
-router.get('/groups/:userId',getListOfGroups);
+router.get('/groups/:userEmail',getListOfGroups);
 
 router.put('/editprofile/:userEmail', editUserProfile);
 
