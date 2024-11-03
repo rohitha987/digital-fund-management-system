@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext'; // Assuming you're using an AuthContext for user info
 
 interface Participant {
     userId: string;
-    userName: string; // Add other fields as necessary
+    userName: string;
 }
 
 interface Group {
@@ -18,7 +19,7 @@ interface Group {
     duration: number;
     totalAmount: number;
     ticketValue: number;
-    participants: string[]; // Array of userIds
+    participants: string[];
     description: string;
     createdAt: Date;
     updatedAt: Date;
@@ -39,6 +40,7 @@ const GroupDetails: React.FC = () => {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const { user } = useAuth(); // Assuming useAuth provides user details including role
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -52,7 +54,6 @@ const GroupDetails: React.FC = () => {
                 });
                 setGroup(response.data);
 
-                // Fetch participants details
                 const participantsData = await Promise.all(
                     response.data.participants.map(async (userId: string) => {
                         const participantResponse = await axios.get(`http://localhost:3000/api/users/${userId}`, {
@@ -77,31 +78,55 @@ const GroupDetails: React.FC = () => {
     }, [groupId]);
 
     const handleViewTransactions = (userId: string) => {
-        navigate(`/transactions/${userId}`); // Redirect to the participant's transactions page
+        navigate(`/transactions/${userId}`);
     };
 
     const handleViewAllGroupTransactions = () => {
-        navigate(`/groups/${groupId}/transactions`); // Redirect to the GroupTransactions page
+        navigate(`/groups/${groupId}/transactions`);
     };
 
+    // const handleViewPlan = async () => {
+    //     try {
+    //         const response = await axios.get(`http://localhost:3000/api/groups/${groupId}/plan`, {
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+    //             },
+    //         });
+    //         console.log('Group Plan:', response.data);
+    //     } catch (err) {
+    //         console.error('Error fetching group plan:', err);
+    //         setError('Failed to fetch group plan.');
+    //     }
+    // };
+
     const handleViewPlan = async () => {
-        try {
-            const response = await axios.get(`http://localhost:3000/api/groups/${groupId}/plan`, {
+    if (!group) return;
+    try {
+        const { totalAmount, duration, members, interest } = group;
+        const response = await axios.post(
+            'http://localhost:3000/api/groups/calculateChit',
+            {
+                totalAmount,
+                months: duration,
+                members,
+                commission: interest,
+            },
+            {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`,
                 },
-            });
-            // Handle the plan data as needed
-            console.log('Group Plan:', response.data);
-            // Navigate or display the plan in a modal, etc.
-        } catch (err) {
-            console.error('Error fetching group plan:', err);
-            setError('Failed to fetch group plan.');
-        }
-    };
-
-    
+            }
+        );
+        
+        // Navigate to PlanDetails with the calculation results
+        navigate('/plan-month', { state: { results: response.data.results, totalProfit: response.data.totalProfit } });
+    } catch (error) {
+        console.error('Error calculating chit:', error);
+        setError('Failed to calculate chit.');
+    }
+};
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div className="text-red-500">{error}</div>;
@@ -137,20 +162,23 @@ const GroupDetails: React.FC = () => {
                             ))}
                         </ul>
 
-                        <button
-                            className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition mb-6"
-                            onClick={handleViewPlan}
-                        >
-                            View Plan
-                        </button>
+                        {user?.userRole === 'organizer' && (
+                            <button
+                                className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition mb-6"
+                                onClick={handleViewPlan}
+                            >
+                                Month View Plan
+                            </button>
+                        )}
 
-                        <button
-                        className="w-full bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-600 transition mb-6"
-                        onClick={() => navigate(`/groups/${groupId}/installments`)}
-                    >
-                        My Installments
-                    </button>
-
+                        {user?.userRole === 'participant' && (
+                            <button
+                                className="w-full bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-600 transition mb-6"
+                                onClick={() => navigate(`/groups/${groupId}/installments`)}
+                            >
+                                My Installments
+                            </button>
+                        )}
 
                         <button
                             className="w-full bg-red-700 text-white py-2 px-4 rounded-md hover:bg-red-500 transition mb-6"
