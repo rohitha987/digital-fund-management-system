@@ -75,6 +75,21 @@ class UserService {
         throw new Error('Error updating user profile');
     }
 }
+
+async addGroup(groupId: any, userEmail: string) {
+  try{
+  const user= await this.getUserByEmail(userEmail);
+  if(!user){
+   throw new Error('User not found');
+  }
+  user.groupIds.push(groupId);
+  return user.save();
+ }
+ catch(error){
+  console.error('Error adding group:', error);
+ }
+}
+
 }
 
 

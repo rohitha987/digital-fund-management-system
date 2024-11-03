@@ -91,3 +91,15 @@ export const editUserProfile: RequestHandler = async (req: Request, res: Respons
         res.status(500).json({ message: errorMessage });
     }
 };
+
+export const addGroups = async (req: Request, res: Response) => {
+    const {userEmail} = req.params;
+    const {groupId} = req.body;
+    try {
+      // console.log(groupId,userId,action);
+      const user = await userService.addGroup(groupId,userEmail);
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(400).json({ message: error });
+    }
+  };

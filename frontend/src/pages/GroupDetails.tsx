@@ -101,6 +101,8 @@ const GroupDetails: React.FC = () => {
         }
     };
 
+    
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div className="text-red-500">{error}</div>;
 
@@ -141,6 +143,14 @@ const GroupDetails: React.FC = () => {
                         >
                             View Plan
                         </button>
+
+                        <button
+                        className="w-full bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-600 transition mb-6"
+                        onClick={() => navigate(`/groups/${groupId}/installments`)}
+                    >
+                        My Installments
+                    </button>
+
 
                         <button
                             className="w-full bg-red-700 text-white py-2 px-4 rounded-md hover:bg-red-500 transition mb-6"

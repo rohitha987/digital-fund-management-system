@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllUsers, getUserByEmail, getUserById, registerUser,getListOfGroups, editUserProfile } from "../controllers/userController";
+import { getAllUsers, getUserByEmail, getUserById, registerUser,getListOfGroups, editUserProfile, addGroups } from "../controllers/userController";
 
 const router = express.Router();
 
@@ -18,5 +18,8 @@ router.get('/email/:userEmail', getUserByEmail); // Change the route to avoid co
 router.get('/groups/:userEmail',getListOfGroups);
 
 router.put('/editprofile/:userEmail', editUserProfile);
+
+router.patch('/addGroup/:userEmail', addGroups);
+ 
 
 export default router;

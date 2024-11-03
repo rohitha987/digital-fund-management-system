@@ -12,6 +12,11 @@ import MyGroups from './pages/MyGroups';
 import ChitPlans from './pages/ChitPlans';
 import GroupDetails from './pages/GroupDetails';
 import GroupTransactions from './pages/GroupTransactions';
+import PlanDetails from './pages/PlanDetails';
+import MyTransaction from './pages/MyTransactions';
+import MonthlyTracker from './pages/MonthlyTracker';
+import AddTransaction from './pages/AddTransaction';
+import GroupForm from './pages/GroupForm';
 
 const App: React.FC = () => {
     return (
@@ -29,6 +34,12 @@ const App: React.FC = () => {
                 <Route path="/chitplans" element={<ChitPlans />} />
                 <Route path="/groups/:groupId" element={<GroupDetails />} />
                 <Route path="/groups/:groupId/transactions" element={<GroupTransactions />} />
+                <Route path="/plan" element={<PlanDetails />} />
+                <Route path="/mytransactions" element={<MyTransaction />} />
+                <Route path="/groups/:groupId/installments" element={<MonthlyTracker />} />
+               <Route path="/groups/:groupId/users/:userId" element={<AddTransaction />} />
+               <Route path="/create-group" element={<GroupForm />} />
+
                 {/* Add other routes here as needed */}
             </Routes>
             </div>

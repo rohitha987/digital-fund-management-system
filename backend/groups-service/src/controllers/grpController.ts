@@ -66,6 +66,8 @@ export const addParticipant = async(req:Request, res:Response)=>{
     }
 }
 
+
+
 export const getParticipantsOfGroup = async (req: Request, res: Response) => {
     try {
         // Find the group by groupId
@@ -99,3 +101,40 @@ export const getParticipantsOfGroup = async (req: Request, res: Response) => {
         res.status(400).json("Failed to fetch participants");
     }
 }
+
+export const calculateChit = (req: Request, res: Response) => {
+    const { totalAmount, months, members, commission } = req.body;
+
+    // Validate inputs
+    if (!totalAmount || !months || !members || totalAmount <= 0 || months <= 0 || members <= 0) {
+        return res.status(400).json({ message: "Please enter valid values for all fields." });
+    }
+
+    const results: Array<any> = [];
+    const Amount = totalAmount / members; // Amount paid monthly
+    let interest = months / 200;
+    let minAmount = totalAmount * (1 - interest); // Minimum bound (first person gets 70% of total)
+    interest = 0;
+
+    for (let month = 1; month <= months; month++) {
+        interest += minAmount;
+        const commissionAmount = (minAmount * commission) / 100;
+        const amountGiven = minAmount - commissionAmount;
+
+        results.push({
+            month: month,
+            amount: minAmount.toFixed(2),
+            commission: commissionAmount.toFixed(2),
+            amountGiven: amountGiven.toFixed(2),
+        });
+
+        minAmount += 0.01 * totalAmount; // Update minAmount for the next month
+    }
+
+    const totalProfit = totalAmount * months - interest;
+    return res.status(200).json({ results, totalProfit });
+};
+
+
+
+// Example route
