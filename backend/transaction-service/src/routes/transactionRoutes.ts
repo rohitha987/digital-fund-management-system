@@ -3,7 +3,7 @@ import { createTransaction, getAllTransactions, getTransactionById, getTransacti
 
 const router=express.Router();
 
-router.post('/', createTransaction);
+router.post('/', createTransaction as any);
 
 router.get('/all', getAllTransactions);
 

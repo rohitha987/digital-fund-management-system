@@ -46,7 +46,7 @@ app.use(
 app.use(
     '/api/transactions',
     authenticateJWT,
-    authorizeRole([UserRole.ADMIN, UserRole.PARTICIPANT]),
+    authorizeRole([UserRole.PARTICIPANT, UserRole.ORGANIZER, UserRole. ADMIN]),
     createProxyMiddleware({ target: 'http://localhost:3004/api/transactions', changeOrigin: true })
 );
 

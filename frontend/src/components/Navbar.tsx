@@ -20,12 +20,14 @@ const Navbar: React.FC = () => {
                 <Link to="/profile" className="text-gray-300 hover:text-white">Profile</Link>
 
                 {isAuthenticated ? (
+                    <Link to="/">
                     <button 
                         onClick={handleLogout} 
                         className="px-4 py-1 border border-gray-500 text-gray-300 rounded-md hover:bg-gray-700 hover:text-white transition-colors duration-200"
                     >
                         Logout
                     </button>
+                    </Link>
                 ) : (
                     <>
                         <Link to="/login">

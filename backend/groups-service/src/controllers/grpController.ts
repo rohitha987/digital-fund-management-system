@@ -131,7 +131,7 @@ export const getParticipantsOfGroup = async (req: Request, res: Response) => {
         // Fetch participant details for each participant ID
         const participantPromises = group.participants.map(async (userId) => {
             console.log(userId);
-            const response = await axios.get(`http://localhost:3000/api/users/${userId}`, {
+            const response = await axios.get(`http://localhost:3002/api/users/${userId}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -181,6 +181,22 @@ export const calculateChit = (req: Request, res: Response) => {
     const totalProfit = totalAmount * months - interest;
     return res.status(200).json({ results, totalProfit });
 };
+
+export const getOrganizerOfGroup = async (req: Request, res: Response) => {
+    try {
+        const group = await Group.findOne({ groupId: req.params.groupId }).select('organizerId');
+        console.log(group); // Select only the organizer field
+        if (!group) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+        res.json(group);
+    } catch (error) {
+        console.error('Error fetching group:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+}
+
+
 
 
 
