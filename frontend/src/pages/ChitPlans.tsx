@@ -1,8 +1,7 @@
-// src/components/MyGroups.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface Group {
     groupId: string;
@@ -21,9 +20,11 @@ interface Group {
 }
 
 const ChitPlans: React.FC = () => {
-    const { user } = useAuth(); // Access user data from context
+    const { user } = useAuth();
     const [groups, setGroups] = useState<Group[]>([]);
     const [error, setError] = useState<string | null>(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchGroups = async () => {
@@ -34,7 +35,7 @@ const ChitPlans: React.FC = () => {
                         Authorization: `Bearer ${localStorage.getItem('authToken')}`,
                     },
                 });
-                setGroups(response.data); // Set groups state to all fetched groups
+                setGroups(response.data);
             } catch (err) {
                 console.error('Error fetching groups:', err);
                 setError('Failed to fetch groups.');
@@ -42,7 +43,31 @@ const ChitPlans: React.FC = () => {
         };
 
         fetchGroups();
-    }, []); // Removed user dependency to fetch all groups on mount
+    }, []);
+
+    const handleCalculateChit = async (group: Group) => {
+        const { groupId,totalAmount, duration, members, interest } = group;
+
+        try {
+            const response = await axios.post('http://localhost:3000/api/groups/calculateChit', {
+                totalAmount,
+                months: duration,
+                members,
+                commission: interest, // Assuming 'interest' represents the commission percentage
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+                },
+            });
+
+            // Navigate to PlanDetails with the results in state
+            navigate('/plan', { state: { results: response.data.results, totalProfit: response.data.totalProfit,groupId:groupId } });
+        } catch (err) {
+            console.error('Error calculating chit:', err);
+            setError('Failed to calculate chit.');
+        }
+    };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-red-200 to-blue-200 py-10 px-4">
@@ -62,11 +87,12 @@ const ChitPlans: React.FC = () => {
                                 <p className="text-gray-700"><strong>Ticket Value:</strong> ${group.ticketValue}</p>
                                 <p className="text-gray-700 mb-4">{group.description}</p>
                                 <div className="flex justify-center mt-auto">
-                                    <Link to={`/groups/${group.groupId}/plan`}>
-                                        <button className="w-full max-w-xs bg-red-700 text-white py-2 px-4 rounded-md hover:bg-red-500 transition">
-                                            View Plan
-                                        </button>
-                                    </Link>
+                                    <button 
+                                        onClick={() => handleCalculateChit(group)} 
+                                        className="w-full max-w-xs bg-red-700 text-white py-2 px-4 rounded-md hover:bg-red-500 transition"
+                                    >
+                                        View Plan
+                                    </button>
                                 </div>
                             </div>
                         ))

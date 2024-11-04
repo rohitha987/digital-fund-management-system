@@ -9,7 +9,7 @@ const port = 3000;
 
 app.use(cors({
     origin: 'http://localhost:3005',
-    methods: ['GET', 'POST', 'PUT','PATCH', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
 }));
@@ -25,7 +25,7 @@ app.use("/api/auth",createProxyMiddleware({
 app.use(
     '/api/users',
     authenticateJWT,
-    authorizeRole([UserRole.PARTICIPANT,UserRole.ORGANIZER]),
+    authorizeRole([UserRole.PARTICIPANT, UserRole.ORGANIZER, UserRole. ADMIN]),
     createProxyMiddleware({ target: 'http://localhost:3002/api/users', changeOrigin: true })
 );
 
@@ -39,7 +39,7 @@ app.use(
 app.use(
     '/api/groups',
     authenticateJWT,
-    authorizeRole([UserRole.PARTICIPANT, UserRole.ORGANIZER]),
+    authorizeRole([UserRole.PARTICIPANT, UserRole.ORGANIZER, UserRole. ADMIN]),
     createProxyMiddleware({ target: 'http://localhost:3003/api/groups', changeOrigin: true })
 );
 

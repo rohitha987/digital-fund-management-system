@@ -1,8 +1,9 @@
 // src/context/AuthContext.tsx
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
 interface User {
+    userId: string;
     userEmail: string;
     userRole: string;
     userMobileNum: string;
@@ -24,7 +25,30 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
 
-    
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            // Assuming the token can help fetch the user info
+            const userEmail = localStorage.getItem('userEmail'); // Store userEmail when logging in
+            if (userEmail) {
+                const fetchUser = async () => {
+                    try {
+                        const response = await axios.get(`http://localhost:3000/api/users/email/${userEmail}`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        });
+                        setUser(response.data);
+                    } catch (error) {
+                        console.error('Failed to fetch user:', error);
+                        logout();
+                    }
+                };
+                fetchUser();
+            }
+        }
+    }, []);
+
     const login = async (email: string, password: string) => {
         try {
             const response = await axios.post('http://localhost:3000/api/auth/login', {
@@ -37,6 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             if (response.data.token) {
                 localStorage.setItem('authToken', response.data.token);
+                localStorage.setItem('userEmail', email);
                 const userResponse = await axios.get(`http://localhost:3000/api/users/email/${email}`, {
                     headers: {
                         'Content-Type': 'application/json',
@@ -55,6 +80,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const logout = () => {
         setUser(null);
         localStorage.removeItem('authToken'); // Clear the token
+        localStorage.removeItem('userEmail');
     };
 
     return (

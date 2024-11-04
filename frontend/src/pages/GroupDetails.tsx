@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 interface Participant {
     userId: string;
@@ -33,6 +34,7 @@ interface Transaction {
 }
 
 const GroupDetails: React.FC = () => {
+    const {user} = useAuth();
     const { groupId } = useParams<{ groupId: string }>();
     const [group, setGroup] = useState<Group | null>(null);
     const [participants, setParticipants] = useState<Participant[]>([]);
@@ -164,6 +166,7 @@ const GroupDetails: React.FC = () => {
                     <>
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-3xl font-semibold text-center text-blue-700">{group.groupName}</h2>
+                            {user?.userRole === 'organizer' && (
                             <div className="relative">
                                 <button
                                     className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition"
@@ -197,6 +200,7 @@ const GroupDetails: React.FC = () => {
                                     </div>
                                 )}
                             </div>
+                            )}
                     </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-gray-700">
                             <p><span className="font-semibold">Type:</span> {group.groupType}</p>
@@ -229,6 +233,14 @@ const GroupDetails: React.FC = () => {
                         >
                             View Plan
                         </button>
+
+                        <button
+                        className="w-full bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-600 transition mb-6"
+                        onClick={() => navigate(`/groups/${groupId}/installments`)}
+                    >
+                        My Installments
+                    </button>
+
 
                         <button
                             className="w-full bg-red-700 text-white py-2 px-4 rounded-md hover:bg-red-500 transition mb-6"

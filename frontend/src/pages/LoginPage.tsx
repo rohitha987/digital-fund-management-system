@@ -26,7 +26,7 @@ const LoginPage: React.FC = () => {
             setTimeout(() => {
                 setSuccess(false);
                 navigate('/mygroups'); // Navigate to profile after successful login
-            }, 2000);
+            }, 1000);
         } catch (err) {
             setError('Login failed. Please check your credentials.');
             setSuccess(false); // Hide success alert on failure
