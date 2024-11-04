@@ -54,11 +54,26 @@ const MyGroups: React.FC = () => {
         navigate(`/groups/${groupId}`); // Redirect to the group details page
     };
 
+    const handleCreateGroup = () => {
+        navigate('/create-group'); // Redirect to the create group page
+    };
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-red-200 to-blue-200">
             <div className="w-full max-w-4xl p-8 bg-white rounded-2xl shadow-lg">
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">My Groups</h2>
                 {error && <div className="text-red-500 mb-4 text-center">{error}</div>}
+                {/* Conditionally render the Create Group button based on user role */}
+                {user?.userRole === 'organizer' && ( // Check if the user is an organizer
+                <div className="flex justify-end mb-4">
+                    <button 
+                        className="h-12 px-6 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-colors duration-200"
+                        onClick={handleCreateGroup}
+                    >
+                        Create Group
+                    </button>
+                </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {groups.length > 0 ? (
                         groups.map(group => (

@@ -35,7 +35,7 @@ export const getByGroupId =async (req:Request,res:Response)=>{
 
 export const updateGroup = async(req:Request,res:Response)=>{
     try{
-        const group = await Group.findOneAndUpdate({groupName:req.params.groupName},req.body,{new:true});
+        const group = await Group.findOneAndUpdate({groupId:req.params.groupId},req.body,{new:true});
         res.status(200).json(group);
     }catch(error){
         res.status(400).json({message:error});
@@ -51,6 +51,47 @@ export const deleteGroup = async(req:Request,res:Response)=>{
     }
 } 
 
+export const requestToJoinGroup = async (req: Request, res: Response) => {
+
+    const { groupId ,userId } = req.body; // Assuming you send userId and groupId in the request body
+
+    try {
+        const group = await Group.findOne({ groupId });
+
+        if (!group) {
+            return res.status(404).json({ message: "Group not found" });
+        }
+
+        // Check if the user has already requested to join
+        if (group.joinRequests.some(request => request === userId)) {
+            return res.status(400).json({ message: "Request already sent" });
+        }
+
+        // Add the request to the joinRequests array
+        group.joinRequests.push(userId);
+        await group.save();
+
+        res.status(200).json({ message: "Join request sent successfully" });
+    } catch (error) {
+        res.status(400).json({ message: error });
+    }
+};
+
+export const getAllRequests  = async (req: Request, res: Response) => {
+    try {
+        const group = await Group.findOne({ groupId: req.params.groupId });
+        if(!group){
+            return res.status(404).json({message:"Group not found"});
+        }
+        const requests = group.joinRequests;
+        res.status(200).json(requests);
+    }
+    catch(error){
+        res.status(400).json({message:error});
+    }
+}
+
+
 export const addParticipant = async(req:Request, res:Response)=>{
     try{
         const group = await Group.findOne({groupId:req.params.groupId});
@@ -59,6 +100,12 @@ export const addParticipant = async(req:Request, res:Response)=>{
         }
         console.log(req.params.userId);
         group.participants.push(req.params.userId);
+        // Find the index of the request
+        const requestIndex = group.joinRequests.findIndex(request => request === req.params.userId);
+        if (requestIndex === -1) {
+            return res.status(404).json({ message: "Join request not found" });
+        }
+        group.joinRequests.splice(requestIndex, 1);
         const updatedGroup = await group.save();
         res.status(200).json(updatedGroup);
     }catch(error){

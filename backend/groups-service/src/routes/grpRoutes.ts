@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createGroup,getAllGroups,getByGroupId,updateGroup,deleteGroup, addParticipant, getParticipantsOfGroup } from "../controllers/grpController";
+import { createGroup,getAllGroups,getByGroupId,updateGroup,deleteGroup, addParticipant, getParticipantsOfGroup, requestToJoinGroup, getAllRequests } from "../controllers/grpController";
 
 const router = Router();
 
@@ -9,11 +9,15 @@ router.get('/all', getAllGroups);
 
 router.get('/:groupId',getByGroupId as any);
 
-router.put('/:groupName', updateGroup);
+router.put('/:groupId', updateGroup);
 
 router.delete('/:groupName', deleteGroup);
 
 router.get('/:groupId/participants/:userId', addParticipant as any);
+
+router.post('/request',requestToJoinGroup as any);
+
+router.get('/:groupId/requests',getAllRequests as any)
 
 router.get('/:groupId/participants', getParticipantsOfGroup as any);
 

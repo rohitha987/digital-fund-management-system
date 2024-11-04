@@ -39,6 +39,8 @@ const GroupDetails: React.FC = () => {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
+    const [requests,setRequests] = useState<Participant[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -65,6 +67,21 @@ const GroupDetails: React.FC = () => {
                     })
                 );
                 setParticipants(participantsData);
+
+                // Fetch requests details
+                const requestsData = await Promise.all(
+                    response.data.joinRequests.map(async (userId: string) => {
+                        const requestResponse = await axios.get(`http://localhost:3000/api/users/${userId}`, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+                            },
+                        });
+                        return requestResponse.data;
+                    })
+                );
+                console.log(requestsData);
+                setRequests(requestsData);
             } catch (err) {
                 console.error('Error fetching group details:', err);
                 setError('Failed to fetch group details.');
@@ -101,6 +118,42 @@ const GroupDetails: React.FC = () => {
         }
     };
 
+    const handleAccept = async (userId: string) => {
+        try {
+            const response = await axios.post(`http://localhost:3000/api/users/${groupId}/join-request/${userId}`,{
+                "action":"accept"
+            },{
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+                },
+            });
+            if(response.status===200)
+                console.log(`Accepted ${userId}`);
+            // Optionally refresh participants or handle UI changes
+        } catch (err) {
+            console.error('Error accepting participant:', err);
+        }
+    };
+
+    const handleReject = async (userId: string) => {
+        try {
+            const response = await axios.post(`http://localhost:3000/api/users/${groupId}/join-request/${userId}`,{
+                "action":"reject"
+            },{
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+                },
+            });
+            if(response.status===200)
+            console.log(`Rejected ${userId}`);
+            // Optionally refresh participants or handle UI changes
+        } catch (err) {
+            console.error('Error rejecting participant:', err);
+        }
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div className="text-red-500">{error}</div>;
 
@@ -109,7 +162,42 @@ const GroupDetails: React.FC = () => {
             <div className="w-full max-w-4xl bg-white p-8 rounded-lg shadow-md">
                 {group ? (
                     <>
-                        <h2 className="text-3xl font-semibold text-center mb-6 text-blue-700">{group.groupName}</h2>
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-3xl font-semibold text-center text-blue-700">{group.groupName}</h2>
+                            <div className="relative">
+                                <button
+                                    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition"
+                                    onClick={() => setDropdownVisible(!dropdownVisible)}
+                                >
+                                    Requests
+                                </button>
+                                {dropdownVisible && (
+                                    <div className="absolute right-0 mt-2 bg-white border rounded-md shadow-lg z-10">
+                                        <ul className="max-h-60 overflow-y-auto">
+                                            {requests.map(participant => (
+                                                <li key={participant.userId} className="flex justify-between items-center p-2 hover:bg-gray-100">
+                                                    <span>{participant.userName}</span>
+                                                    <div className="flex space-x-1">
+                                                        <button
+                                                            className="bg-green-500 text-white py-1 px-2 rounded-md mr-1"
+                                                            onClick={() => handleAccept(participant.userId)}
+                                                        >
+                                                            Accept
+                                                        </button>
+                                                        <button
+                                                            className="bg-red-500 text-white py-1 px-2 rounded-md"
+                                                            onClick={() => handleReject(participant.userId)}
+                                                        >
+                                                            Reject
+                                                        </button>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+                    </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-gray-700">
                             <p><span className="font-semibold">Type:</span> {group.groupType}</p>
                             <p><span className="font-semibold">Interest:</span> {group.interest}%</p>

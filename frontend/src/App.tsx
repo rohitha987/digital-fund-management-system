@@ -1,6 +1,6 @@
 // src/App.tsx
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom';
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import RegistrationPage from './pages/RegistrationPage';
@@ -12,6 +12,7 @@ import MyGroups from './pages/MyGroups';
 import ChitPlans from './pages/ChitPlans';
 import GroupDetails from './pages/GroupDetails';
 import GroupTransactions from './pages/GroupTransactions';
+import GroupForm from './pages/GroupForm';
 
 const App: React.FC = () => {
     return (
@@ -29,11 +30,13 @@ const App: React.FC = () => {
                 <Route path="/chitplans" element={<ChitPlans />} />
                 <Route path="/groups/:groupId" element={<GroupDetails />} />
                 <Route path="/groups/:groupId/transactions" element={<GroupTransactions />} />
+                <Route path="/create-group" element={<GroupForm />} />
                 {/* Add other routes here as needed */}
             </Routes>
             </div>
         </BrowserRouter>
         </AuthProvider>
+
     );
 };
 

@@ -9,7 +9,7 @@ const port = 3000;
 
 app.use(cors({
     origin: 'http://localhost:3005',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT','PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
 }));
@@ -25,7 +25,7 @@ app.use("/api/auth",createProxyMiddleware({
 app.use(
     '/api/users',
     authenticateJWT,
-    authorizeRole([UserRole.PARTICIPANT]),
+    authorizeRole([UserRole.PARTICIPANT,UserRole.ORGANIZER]),
     createProxyMiddleware({ target: 'http://localhost:3002/api/users', changeOrigin: true })
 );
 

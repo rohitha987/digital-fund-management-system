@@ -1,6 +1,7 @@
 import { Request, Response, RequestHandler } from 'express';
 import UserService from '../services/userService';
 import User from '../models/User';
+import axios from 'axios';
 
 const userService = new UserService();
 
@@ -91,3 +92,28 @@ export const editUserProfile: RequestHandler = async (req: Request, res: Respons
         res.status(500).json({ message: errorMessage });
     }
 };
+
+export const respondToJoinRequest = async (req: Request, res: Response) => {
+    const { groupId, userId } = req.params; // Get the groupId and userId from the params
+    const { action } = req.body; // Expecting 'accept' or 'reject'
+
+    try {
+        // console.log(groupId,userId,action);
+        const user = await userService.respondToJoinRequest(groupId,userId,action);
+        res.status(200).json({ message: `Request ${action}ed successfully` });
+    } catch (error) {
+        res.status(400).json({ message: error });
+    }
+};
+
+export const addGroups = async  (req: Request, res: Response) => {
+    const {userEmail} = req.params;
+    const {groupId} = req.body;
+    try {
+        // console.log(groupId,userId,action);
+        const user = await userService.addGroup(groupId,userEmail);
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(400).json({ message: error });
+    }
+}
