@@ -17,15 +17,15 @@ app.use(cors({
 app.options('*', cors());
 
 //app.use('/api/auth', createProxyMiddleware({ target: 'http://localhost:3001', changeOrigin: true }));
-app.use("/api/auth",createProxyMiddleware({
-    target:"http://localhost:3001/api/auth",
-    changeOrigin:true
+app.use("/api/auth", createProxyMiddleware({
+    target: "http://localhost:3001/api/auth",
+    changeOrigin: true
 }));
 
 app.use(
     '/api/users',
     authenticateJWT,
-    authorizeRole([UserRole.PARTICIPANT, UserRole.ORGANIZER, UserRole. ADMIN]),
+    authorizeRole([UserRole.PARTICIPANT, UserRole.ORGANIZER, UserRole.ADMIN]),
     createProxyMiddleware({ target: 'http://localhost:3002/api/users', changeOrigin: true })
 );
 
@@ -35,18 +35,30 @@ app.use(
 //     authorizeRole([UserRole.PARTICIPANT]),
 //     createProxyMiddleware({ target: 'http://localhost:3002/api/users/all', changeOrigin: true })
 // );
+// app.use('/api/groups/all', createProxyMiddleware({
+//     target: 'http://localhost:3003/api/groups/all',
+//     changeOrigin: true
+// }));
 
 app.use(
     '/api/groups',
-    authenticateJWT,
-    authorizeRole([UserRole.PARTICIPANT, UserRole.ORGANIZER, UserRole. ADMIN]),
+    (req, res, next) => {
+        if (req.path === '/all' || req.path === '/calculateChit') {
+            return next(); // Skip security middleware for '/api/groups/all'
+        }
+
+        // Apply authentication and authorization for other routes
+        authenticateJWT(req, res, () => {
+            authorizeRole([UserRole.PARTICIPANT, UserRole.ORGANIZER, UserRole.ADMIN])(req, res, next);
+        });
+    },
     createProxyMiddleware({ target: 'http://localhost:3003/api/groups', changeOrigin: true })
 );
 
 app.use(
     '/api/transactions',
     authenticateJWT,
-    authorizeRole([UserRole.PARTICIPANT, UserRole.ORGANIZER, UserRole. ADMIN]),
+    authorizeRole([UserRole.PARTICIPANT, UserRole.ORGANIZER, UserRole.ADMIN]),
     createProxyMiddleware({ target: 'http://localhost:3004/api/transactions', changeOrigin: true })
 );
 

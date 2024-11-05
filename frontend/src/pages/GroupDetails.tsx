@@ -103,55 +103,34 @@ const GroupDetails: React.FC = (GroupDetailsProp) => {
         navigate(`/groups/${groupId}/transactions`);
     };
 
-    // const handleViewPlan = async () => {
-    //     try {
-    //         const response = await axios.get(`http://localhost:3000/api/groups/${groupId}/plan`, {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-    //             },
-    //         });
-    //         console.log('Group Plan:', response.data);
-    //     } catch (err) {
-    //         console.error('Error fetching group plan:', err);
-    //         setError('Failed to fetch group plan.');
-    //     }
-    // };
-
-    // const handleViewPlan = async () => {
-    // if (!group) return;
-    // try {
-    //     const { totalAmount, duration, members, interest } = group;
-    //     const response = await axios.post(
-    //         'http://localhost:3000/api/groups/calculateChit',
-    //         {
-    //             totalAmount,
-    //             months: duration,
-    //             members,
-    //             commission: interest,
-    //         },
-    //         {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-    //             },
-    //         });
-    //         // Handle the plan data as needed
-    //         console.log('Group Plan:', response.data);
-    //         console.log(groupId);
-    //         // Navigate or display the plan in a modal, etc.
-    //     } catch (err) {
-    //         console.error('Error fetching group plan:', err);
-    //         setError('Failed to fetch group plan.');
-    //     }
-    // };
-
     const handleViewPlan = async () => {
-        console.log(groupId); // Log the groupId to the console
-
-        // Navigate to the MonthlyPlan page and pass the groupId in the state
-        navigate(`/groups/${groupId}/plan`, { state: { groupId } }); // Pass groupId in state
+    if (!group) return;
+    try {
+        const { totalAmount, duration, members, interest } = group;
+        const response = await axios.post(
+            'http://localhost:3000/api/groups/calculateChit',
+            {
+                totalAmount,
+                months: duration,
+                members,
+                commission: interest,
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+                },
+            });
+            // Handle the plan data as needed
+            console.log('Group Plan:', response.data);
+            navigate('/plan-month', { state: { results: response.data.results, totalProfit: response.data.totalProfit } });
+            // Navigate or display the plan in a modal, etc.
+        } catch (err) {
+            console.error('Error fetching group plan:', err);
+            setError('Failed to fetch group plan.');
+        }
     };
+
     const handleAccept = async (userId: string) => {
         try {
             const response = await axios.post(`http://localhost:3000/api/users/${groupId}/join-request/${userId}`,{
@@ -187,16 +166,6 @@ const GroupDetails: React.FC = (GroupDetailsProp) => {
             console.error('Error rejecting participant:', err);
         }
     };
-//             }
-//         );
-        
-//         // Navigate to PlanDetails with the calculation results
-//         navigate('/plan-month', { state: { results: response.data.results, totalProfit: response.data.totalProfit } });
-//     } catch (error) {
-//         console.error('Error calculating chit:', error);
-//         setError('Failed to calculate chit.');
-//     }
-// };
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div className="text-red-500">{error}</div>;

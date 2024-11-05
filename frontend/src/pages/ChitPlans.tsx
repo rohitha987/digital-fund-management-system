@@ -48,7 +48,7 @@ const ChitPlans: React.FC = () => {
     const handleCalculateChit = async (group: Group) => {
         const { groupId,totalAmount, duration, members, interest } = group;
 
-        try {
+        // try {
             const response = await axios.post('http://localhost:3000/api/groups/calculateChit', {
                 totalAmount,
                 months: duration,
@@ -63,14 +63,14 @@ const ChitPlans: React.FC = () => {
 
             // Navigate to PlanDetails with the results in state
             navigate('/plan', { state: { results: response.data.results, totalProfit: response.data.totalProfit,groupId:groupId } });
-        } catch (err) {
-            console.error('Error calculating chit:', err);
-            setError('Failed to calculate chit.');
-        }
+        // } catch (err) {
+        //     console.error('Error calculating chit:', err);
+        //     setError('Failed to calculate chit.');
+        // }
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-red-200 to-blue-200 py-10 px-4">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-green-100 py-10 px-4">
             <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-md">
                 <h2 className="text-3xl font-bold text-center mb-6 text-black-600">All Chit Plans</h2>
                 {error && <div className="text-red-500 mb-4">{error}</div>}
