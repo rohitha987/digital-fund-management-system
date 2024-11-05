@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 interface CalculationResult {
@@ -10,9 +10,9 @@ interface CalculationResult {
 }
 
 const PlanDetails: React.FC = () => {
-    const {user} = useAuth();
+    const { user } = useAuth();
     const location = useLocation();
-    const { results, totalProfit,groupId } = location.state || { results: [], totalProfit: null, groupId:null };
+    const { results, totalProfit, groupId } = location.state || { results: [], totalProfit: null, groupId: null };
     const [buttonLabel, setButtonLabel] = useState('Join');
     console.log('User Role:', user?.userRole);
 
@@ -53,12 +53,12 @@ const PlanDetails: React.FC = () => {
                 <h2 className="text-3xl font-bold text-center mb-6 text-black-600">Chit Calculation Results</h2>
                 {user?.userRole === 'participant' && (
                     <div className="flex justify-end mb-4">
-                    <button
-                        onClick={()=>handleJoinGroup(user.userId)}
-                        className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
-                    >
-                        {buttonLabel}
-                    </button>
+                        <button
+                            onClick={() => handleJoinGroup(user.userId)}
+                            className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+                        >
+                            {buttonLabel}
+                        </button>
                     </div>
                 )}
                 <table className="min-w-full bg-white border rounded-lg">
@@ -81,11 +81,20 @@ const PlanDetails: React.FC = () => {
                         ))}
                     </tbody>
                 </table>
-                {totalProfit !== null && (
-                    <div className="mt-4 text-lg font-semibold">
-                        Total Profit: ${totalProfit.toFixed(2)}
+                {user !== null ? (
+                    totalProfit !== null ? (
+                        <div className="mt-4 text-lg font-semibold">
+                            Total Profit: ${totalProfit.toFixed(2)}
+                        </div>
+                    ) : null
+                ) : (
+                    <Link to='/login'>
+                    <div className="mt-4 text-lg font-semibold hover:underline">
+                        Log In to Join Group
                     </div>
+                    </Link>
                 )}
+
             </div>
         </div>
     );

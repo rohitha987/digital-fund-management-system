@@ -20,6 +20,7 @@ import GroupForm from './pages/GroupForm';
 import MonthlyPlan from './pages/MonthPlan';
 import AddPayment from './pages/AddPayment';
 // import PlanDetails1 from './pages/PlanDetails1';
+import Footer from './components/Footer';
 
 
 
@@ -49,6 +50,7 @@ const App: React.FC = () => {
                <Route path="/add-payment" element={<AddPayment/>} />
                 {/* Add other routes here as needed */}
             </Routes>
+            <Footer />
             </div>
         </BrowserRouter>
         </AuthProvider>

@@ -2,6 +2,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import logo from '../assets/logo2.png';
+
 
 const Navbar: React.FC = () => {
     const { isAuthenticated, logout } = useAuth();
@@ -12,7 +14,10 @@ const Navbar: React.FC = () => {
 
     return (
         <nav className="flex justify-between items-center p-4 bg-black shadow-md w-full">
-            <a href="/" className="text-xl font-semibold text-white hover:text-gray-400">DCFM</a>
+            <div className="flex items-center">
+        <a href='/'><img src={logo} alt="Digital Chit Fund Management Logo" className="md:h-12 lg:h-14" /></a> {/* Adjust 'h-10' for logo size */}
+        <span className="ml-3 text-lg font-semibold">Digital Chit Fund Management</span>
+      </div>
             <div className="space-x-6 flex items-center">
                 <Link to="/chitplans" className="text-gray-300 hover:text-white">Chit Plans</Link>
                 <Link to="/mygroups" className="text-gray-300 hover:text-white">My Groups</Link>
