@@ -117,3 +117,17 @@ export const addGroups = async  (req: Request, res: Response) => {
         res.status(400).json({ message: error });
     }
 }
+
+export const getIdByUserName: RequestHandler = async (req: Request, res: Response) => {
+    try {
+        const user = await userService.getIdByUserName(req.params.userName);
+        if (user) {
+            res.status(200).json(user);
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+        res.status(500).json({ message: errorMessage });
+    }
+  };

@@ -121,6 +121,24 @@ class UserService {
   }
 }
 
+async getIdByUserName(userName: string): Promise<string | null> {
+  try {
+    // Find user by userName and select only the userId field
+    const user = await User.findOne({ userName }).select('userId');
+    
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Return the userId
+    return user.userId;
+  } catch (error) {
+    console.error('Error fetching user ID by userName:', error);
+    throw new Error('Error fetching user ID');
+  }
+}
+
+
 }
 
 

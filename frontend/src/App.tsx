@@ -17,6 +17,9 @@ import MyTransaction from './pages/MyTransactions';
 import MonthlyTracker from './pages/MonthlyTracker';
 import AddTransaction from './pages/AddTransaction';
 import GroupForm from './pages/GroupForm';
+import MonthlyPlan from './pages/MonthPlan';
+import AddPayment from './pages/AddPayment';
+// import PlanDetails1 from './pages/PlanDetails1';
 
 
 
@@ -41,7 +44,9 @@ const App: React.FC = () => {
                 <Route path="/groups/:groupId/installments" element={<MonthlyTracker />} />
                <Route path="/groups/:groupId/users/:userId" element={<AddTransaction />} />
                <Route path="/create-group" element={<GroupForm />} />
-
+               {/* <Route path="/plan-month" element={<PlanDetails1/>} /> */}
+               <Route path="/groups/:groupId/plan" element={<MonthlyPlan />} />
+               <Route path="/add-payment" element={<AddPayment/>} />
                 {/* Add other routes here as needed */}
             </Routes>
             </div>

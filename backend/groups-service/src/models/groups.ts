@@ -12,6 +12,7 @@ interface IGroup extends Document{
     ticketValue:number;
     participants:string[];
     joinRequests:string[];
+    monthlyDraw: string[];
     description:string;
     createdAt:Date;
     updatedAt:Date;
@@ -29,6 +30,7 @@ const groupSchema:Schema<IGroup> = new Schema({
     ticketValue:{type:Number,required:true},
     participants:{type:[String]},
     joinRequests:{type:[String]},
+    monthlyDraw:{type:[String]},
     description:{type:String,required:true}
 },{
     collection:"groups",

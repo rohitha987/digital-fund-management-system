@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext'; // Assuming you're using an AuthContext for user info
+import { useAuth } from '../context/AuthContext';
+
 
 interface Participant {
     userId: string;
@@ -33,7 +34,7 @@ interface Transaction {
     userId: string;
 }
 
-const GroupDetails: React.FC = () => {
+const GroupDetails: React.FC = (GroupDetailsProp) => {
     const {user} = useAuth();
     const { groupId } = useParams<{ groupId: string }>();
     const [group, setGroup] = useState<Group | null>(null);
@@ -43,8 +44,8 @@ const GroupDetails: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
     const [requests,setRequests] = useState<Participant[]>([]);
-    const navigate = useNavigate();
 
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchGroupDetails = async () => {
             try {
@@ -68,7 +69,7 @@ const GroupDetails: React.FC = () => {
                     })
                 );
                 setParticipants(participantsData);
-
+                console.log(response.data);
                 // Fetch requests details
                 const requestsData = await Promise.all(
                     response.data.joinRequests.map(async (userId: string) => {
@@ -117,33 +118,40 @@ const GroupDetails: React.FC = () => {
     //     }
     // };
 
-    const handleViewPlan = async () => {
-    if (!group) return;
-    try {
-        const { totalAmount, duration, members, interest } = group;
-        const response = await axios.post(
-            'http://localhost:3000/api/groups/calculateChit',
-            {
-                totalAmount,
-                months: duration,
-                members,
-                commission: interest,
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-                },
-            });
-            // Handle the plan data as needed
-            console.log('Group Plan:', response.data);
-            // Navigate or display the plan in a modal, etc.
-        } catch (err) {
-            console.error('Error fetching group plan:', err);
-            setError('Failed to fetch group plan.');
-        }
-    };
+    // const handleViewPlan = async () => {
+    // if (!group) return;
+    // try {
+    //     const { totalAmount, duration, members, interest } = group;
+    //     const response = await axios.post(
+    //         'http://localhost:3000/api/groups/calculateChit',
+    //         {
+    //             totalAmount,
+    //             months: duration,
+    //             members,
+    //             commission: interest,
+    //         },
+    //         {
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+    //             },
+    //         });
+    //         // Handle the plan data as needed
+    //         console.log('Group Plan:', response.data);
+    //         console.log(groupId);
+    //         // Navigate or display the plan in a modal, etc.
+    //     } catch (err) {
+    //         console.error('Error fetching group plan:', err);
+    //         setError('Failed to fetch group plan.');
+    //     }
+    // };
 
+    const handleViewPlan = async () => {
+        console.log(groupId); // Log the groupId to the console
+
+        // Navigate to the MonthlyPlan page and pass the groupId in the state
+        navigate(`/groups/${groupId}/plan`, { state: { groupId } }); // Pass groupId in state
+    };
     const handleAccept = async (userId: string) => {
         try {
             const response = await axios.post(`http://localhost:3000/api/users/${groupId}/join-request/${userId}`,{
@@ -251,12 +259,12 @@ const GroupDetails: React.FC = () => {
                             {participants.map(participant => (
                                 <li key={participant.userId} className="flex items-center justify-between text-gray-700">
                                     {participant.userName}
-                                    <button
+                                    {/* <button
                                         className="text-blue-600 hover:underline"
                                         onClick={() => handleViewTransactions(participant.userId)}
                                     >
                                         View Transactions
-                                    </button>
+                                    </button> */}
                                 </li>
                             ))}
                         </ul>
@@ -266,7 +274,7 @@ const GroupDetails: React.FC = () => {
                                 className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition mb-6"
                                 onClick={handleViewPlan}
                             >
-                                Month View Plan
+                                View Monthly Plan
                             </button>
                         )}
 

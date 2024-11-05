@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllUsers, getUserByEmail, getUserById, registerUser,getListOfGroups, editUserProfile, respondToJoinRequest, addGroups } from "../controllers/userController";
+import { getAllUsers, getUserByEmail, getUserById, registerUser,getListOfGroups, editUserProfile, respondToJoinRequest, addGroups, getIdByUserName } from "../controllers/userController";
 
 const router = express.Router();
 
@@ -14,6 +14,8 @@ router.get('/:userId', getUserById);
 
 // Route for getting a user by their email
 router.get('/email/:userEmail', getUserByEmail); // Change the route to avoid conflicts
+
+router.get('/name/:userName', getIdByUserName); // Change the route to avoid
 
 router.get('/groups/:userEmail',getListOfGroups);
 

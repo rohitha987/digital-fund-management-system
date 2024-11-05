@@ -20,7 +20,7 @@ interface Group {
 }
 
 const ChitPlans: React.FC = () => {
-    const { user } = useAuth();
+     const { user } = useAuth();
     const [groups, setGroups] = useState<Group[]>([]);
     const [error, setError] = useState<string | null>(null);
 
