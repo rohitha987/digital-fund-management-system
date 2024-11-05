@@ -15,7 +15,7 @@ const MyTransaction: React.FC = () => {
     const { user } = useAuth();
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [sortedTransactions, setSortedTransactions] = useState<Transaction[]>([]);
-    const [sortBy, setSortBy] = useState<string>('date'); // Default sort by date
+    const [sortBy, setSortBy] = useState<string>('date');
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -33,7 +33,7 @@ const MyTransaction: React.FC = () => {
                     },
                 });
                 setTransactions(response.data);
-                setSortedTransactions(response.data); // Initialize sorted transactions
+                setSortedTransactions(response.data);
             } catch (err) {
                 console.error('Error fetching transactions:', err);
                 setError('Failed to fetch transactions.');
@@ -54,7 +54,6 @@ const MyTransaction: React.FC = () => {
         } else if (criteria === 'type') {
             sortedData.sort((a, b) => a.transactionType.localeCompare(b.transactionType));
         } else {
-            // Default sort by date
             sortedData.sort((a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime());
         }
 
@@ -62,56 +61,62 @@ const MyTransaction: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-green-100 py-10 px-4">
-            <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-3xl font-bold text-center mb-6 text-blue-600">My Transactions</h2>
-                {error && <div className="text-red-500 mb-4">{error}</div>}
+        <div className="flex flex-col items-center min-h-screen bg-gradient-to-r from-blue-100 to-green-100 py-10 px-6">
+            <div className="w-full max-w-5xl bg-white p-8 rounded-xl shadow-lg">
+                <h2 className="text-4xl font-bold text-center mb-8 text-black-900">My Transactions</h2>
+                {error && <div className="text-red-500 mb-6">{error}</div>}
 
-                <div className="flex justify-between mb-4">
-                    <div>
-                        <button onClick={() => handleSort('date')} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                <div className="flex justify-between mb-6">
+                    <div className="flex space-x-4">
+                        <button onClick={() => handleSort('date')} className="bg-green-700 text-white px-5 py-2 rounded-full hover:bg-green-500">
                             Sort by Date
                         </button>
-                        <button onClick={() => handleSort('group')} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 ml-2">
+                        <button onClick={() => handleSort('group')} className="bg-green-700 text-white px-5 py-2 rounded-full hover:bg-green-500">
                             Sort by Group
                         </button>
-                        <button onClick={() => handleSort('month')} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 ml-2">
+                        <button onClick={() => handleSort('month')} className="bg-green-700 text-white px-5 py-2 rounded-full hover:bg-green-500">
                             Sort by Month
                         </button>
-                        <button onClick={() => handleSort('type')} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 ml-2">
+                        <button onClick={() => handleSort('type')} className="bg-green-700 text-white px-5 py-2 rounded-full hover:bg-green-500">
                             Sort by Type
                         </button>
                     </div>
                 </div>
 
-                <table className="min-w-full bg-white border rounded-lg">
-                    <thead>
-                        <tr className="bg-gray-200">
-                            <th className="py-2 px-4 border-b text-left">Transaction ID</th>
-                            <th className="py-2 px-4 border-b text-right">Amount</th>
-                            <th className="py-2 px-4 border-b text-left">Date</th>
-                            <th className="py-2 px-4 border-b text-left">Type</th>
-                            <th className="py-2 px-4 border-b text-left">Group ID</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {sortedTransactions.length > 0 ? (
-                            sortedTransactions.map(transaction => (
-                                <tr key={transaction.transactionId} className="hover:bg-gray-100">
-                                    <td className="py-2 px-4 border-b">{transaction.transactionId}</td>
-                                    <td className="py-2 px-4 border-b text-right">${transaction.transactionAmount.toFixed(2)}</td>
-                                    <td className="py-2 px-4 border-b">{new Date(transaction.transactionDate).toLocaleDateString()}</td>
-                                    <td className="py-2 px-4 border-b">{transaction.transactionType}</td>
-                                    <td className="py-2 px-4 border-b">{transaction.groupId}</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={5} className="py-2 px-4 text-center">No transactions found.</td>
+                <div className="overflow-x-auto">
+                    <table className="min-w-full bg-white rounded-lg shadow-sm">
+                        <thead>
+                            <tr className="bg-indigo-200 text-indigo-900">
+                                <th className="py-4 px-6 border-b text-left">Transaction ID</th>
+                                <th className="py-4 px-6 border-b text-right">Amount</th>
+                                <th className="py-4 px-6 border-b text-left">Date</th>
+                                <th className="py-4 px-6 border-b text-left">Type</th>
+                                <th className="py-4 px-6 border-b text-left">Group ID</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {sortedTransactions.length > 0 ? (
+                                sortedTransactions.map(transaction => (
+                                    <tr key={transaction.transactionId} className="hover:bg-indigo-50">
+                                        <td className="py-4 px-6 border-b text-gray-800">{transaction.transactionId}</td>
+                                        <td className="py-4 px-6 border-b text-right text-gray-800">${transaction.transactionAmount.toFixed(2)}</td>
+                                        <td className="py-4 px-6 border-b text-gray-800">{new Date(transaction.transactionDate).toLocaleDateString()}</td>
+                                        <td className="py-4 px-6 border-b text-gray-800">
+                                            <span className={`font-semibold px-3 py-1 rounded-full ${transaction.transactionType === 'credit' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
+                                                {transaction.transactionType}
+                                            </span>
+                                        </td>
+                                        <td className="py-4 px-6 border-b text-gray-800">{transaction.groupId}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={5} className="py-4 px-6 text-center text-gray-600">No transactions found.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

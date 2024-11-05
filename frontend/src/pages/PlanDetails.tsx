@@ -48,20 +48,20 @@ const PlanDetails: React.FC = () => {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-red-200 to-blue-200 py-10 px-4">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-green-100 py-10 px-4">
             <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-md">
                 <h2 className="text-3xl font-bold text-center mb-6 text-black-600">Chit Calculation Results</h2>
                 {user?.userRole === 'participant' && (
                     <div className="flex justify-end mb-4">
                         <button
                             onClick={() => handleJoinGroup(user.userId)}
-                            className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+                            className="bg-indigo-800 text-white font-bold py-2 px-4 rounded"
                         >
                             {buttonLabel}
                         </button>
                     </div>
                 )}
-                <table className="min-w-full bg-white border rounded-lg">
+                <table className="min-w-full bg-white border rounded-lg text-center">
                     <thead>
                         <tr>
                             <th className="py-2 px-4 border-b">Month</th>
@@ -73,23 +73,23 @@ const PlanDetails: React.FC = () => {
                     <tbody>
                         {results.map((result: CalculationResult, index: number) => (
                             <tr key={index}>
-                                <td className="py-2 px-4 border-b">{`Month ${result.month}`}</td>
-                                <td className="py-2 px-4 border-b">${result.amount}</td>
-                                <td className="py-2 px-4 border-b">${result.commission}</td>
-                                <td className="py-2 px-4 border-b">${result.amountGiven}</td>
+                                <td className="py-2 px-4 border-b text-center">{`Month ${result.month}`}</td>
+                                <td className="py-2 px-4 border-b text-center">${result.amount}</td>
+                                <td className="py-2 px-4 border-b text-center">${result.commission}</td>
+                                <td className="py-2 px-4 border-b text-center">${result.amountGiven}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
                 {user !== null ? (
                     totalProfit !== null ? (
-                        <div className="mt-4 text-lg font-semibold">
+                        <div className="mt-4 text-lg font-semibold text-center">
                             Total Profit: ${totalProfit.toFixed(2)}
                         </div>
                     ) : null
                 ) : (
                     <Link to='/login'>
-                    <div className="mt-4 text-lg font-semibold hover:underline">
+                    <div className="mt-4 text-lg font-semibold text-center hover:underline">
                         Log In to Join Group
                     </div>
                     </Link>
@@ -101,5 +101,3 @@ const PlanDetails: React.FC = () => {
 };
 
 export default PlanDetails;
-
-

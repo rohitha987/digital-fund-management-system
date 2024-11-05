@@ -21,6 +21,7 @@ import MonthlyPlan from './pages/MonthPlan';
 import AddPayment from './pages/AddPayment';
 // import PlanDetails1 from './pages/PlanDetails1';
 import Footer from './components/Footer';
+import MonthPlan from './pages/MonthPlan';
 
 
 
@@ -47,6 +48,7 @@ const App: React.FC = () => {
                <Route path="/create-group" element={<GroupForm />} />
                {/* <Route path="/plan-month" element={<PlanDetails1/>} /> */}
                <Route path="/groups/:groupId/plan" element={<MonthlyPlan />} />
+               <Route path="/plan-month" element={<MonthPlan />} />
                <Route path="/add-payment" element={<AddPayment/>} />
                 {/* Add other routes here as needed */}
             </Routes>

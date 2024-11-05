@@ -51,9 +51,9 @@ const MyGroups: React.FC = () => {
     navigate('/create-group'); // Redirect to the create group page
   };
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-red-200 to-blue-200">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-green-100">
       <div className="w-full max-w-4xl p-8 bg-white rounded-2xl shadow-lg">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">My Groups</h2>
+        <h2 className="text-3xl font-bold text-center text-black-800 mb-6">My Groups</h2>
         {error && <div className="text-red-500 mb-4 text-center">{error}</div>}
         {/* Conditionally render the Create Group button based on user role */}
         {user?.userRole === 'organizer' && ( // Check if the user is an organizer
@@ -70,8 +70,8 @@ const MyGroups: React.FC = () => {
           {groups.length > 0 ? (
             groups.map(group => (
               <div key={group.groupId} className="flex flex-col p-6 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 bg-gray-50">
-                <h3 className="text-xl font-semibold text-gray-800">{group.groupName}</h3>
-                <p className="text-gray-600">Type: <span className="font-medium">{group.groupType}</span></p>
+                <h3 className="text-xl font-semibold text-indigo-800">{group.groupName}</h3>
+                {/* <p className="text-gray-600">Type: <span className="font-medium">{group.groupType}</span></p> */}
                 <p className="text-gray-600">Interest: <span className="font-medium">{group.interest}%</span></p>
                 <p className="text-gray-600">Members: <span className="font-medium">{group.members}</span></p>
                 <p className="text-gray-600">Duration: <span className="font-medium">{group.duration} months</span></p>
@@ -80,7 +80,7 @@ const MyGroups: React.FC = () => {
                 <p className="text-gray-600 mb-4 flex-grow">{group.description}</p>
                 <div className="mt-4">
                   <button
-                    className="w-full h-12 bg-red-700 text-white rounded-lg hover:bg-red-500 transition-colors duration-200"
+                    className="w-full h-12 bg-indigo-800 text-white rounded-lg hover:bg-indigo-400 transition-colors duration-200"
                     onClick={() => handleViewDetails(group.groupId)}
                   >
                     View Details

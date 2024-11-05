@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import logo from '../assets/logo2.png';
+import logo from '../assets/image (3).png';
 
 
 const Navbar: React.FC = () => {
@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
     return (
         <nav className="flex justify-between items-center p-4 bg-black shadow-md w-full">
             <div className="flex items-center">
-        <a href='/'><img src={logo} alt="Digital Chit Fund Management Logo" className="md:h-12 lg:h-14" /></a> {/* Adjust 'h-10' for logo size */}
+        <a href='/'><img src={logo} alt="Digital Chit Fund Management Logo" className="md:h-12 lg:h-14 ml-7" /></a> {/* Adjust 'h-10' for logo size */}
         <span className="ml-3 text-lg font-semibold">Digital Chit Fund Management</span>
       </div>
             <div className="space-x-6 flex items-center">
@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
                             </button>
                         </Link>
                         <Link to="/register">
-                            <button className="px-4 py-1 bg-red-700 text-white rounded-md hover:bg-red-500 transition-colors duration-200">
+                            <button className="px-4 py-1 bg-indigo-800 text-white rounded-md hover:bg-indigo-400 transition-colors duration-200">
                                 Register
                             </button>
                         </Link>

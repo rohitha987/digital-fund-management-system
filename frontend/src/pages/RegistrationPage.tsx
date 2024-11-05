@@ -151,7 +151,7 @@ const RegistrationPage: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-red-700 text-white p-2 rounded-md hover:bg-red-500"
+            className="w-full bg-indigo-800 text-white p-2 rounded-md hover:bg-indigo-400"
           >
             Register
           </button>

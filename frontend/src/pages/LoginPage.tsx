@@ -61,7 +61,7 @@ const LoginPage: React.FC = () => {
                         <label className="block text-sm font-semibold mb-2" htmlFor="password">Password</label>
                         <input type="password" name="password" id="password" value={formData.password} onChange={handleChange} required className="w-full p-2 border rounded-md" />
                     </div>
-                    <button type="submit" className="w-full bg-red-700 text-white p-2 rounded-md hover:bg-red-500">Login</button>
+                    <button type="submit" className="w-full bg-indigo-800 text-white p-2 rounded-md hover:bg-indigo-400">Login</button>
                 </form>
             </div>
         </div>

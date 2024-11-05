@@ -72,14 +72,14 @@ const ChitPlans: React.FC = () => {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-green-100 py-10 px-4">
             <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-3xl font-bold text-center mb-6 text-black-600">All Chit Plans</h2>
+                <h2 className="text-3xl font-bold text-center mb-6 text-black-700">All Chit Plans</h2>
                 {error && <div className="text-red-500 mb-4">{error}</div>}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {groups.length > 0 ? (
                         groups.map(group => (
                             <div key={group.groupId} className="p-4 border rounded-lg shadow hover:shadow-lg transition-shadow duration-200 bg-gray-50 flex flex-col">
-                                <h3 className="text-xl font-semibold mb-2 text-black-500">{group.groupName}</h3>
-                                <p className="text-gray-700"><strong>Type:</strong> {group.groupType}</p>
+                                <h3 className="text-xl font-semibold mb-2 text-indigo-900">{group.groupName}</h3>
+                                {/* <p className="text-gray-700"><strong>Type:</strong> {group.groupType}</p> */}
                                 <p className="text-gray-700"><strong>Interest:</strong> {group.interest}%</p>
                                 <p className="text-gray-700"><strong>Members:</strong> {group.members}</p>
                                 <p className="text-gray-700"><strong>Duration:</strong> {group.duration} months</p>
@@ -89,7 +89,7 @@ const ChitPlans: React.FC = () => {
                                 <div className="flex justify-center mt-auto">
                                     <button 
                                         onClick={() => handleCalculateChit(group)} 
-                                        className="w-full max-w-xs bg-red-700 text-white py-2 px-4 rounded-md hover:bg-red-500 transition"
+                                        className="w-full max-w-xs bg-indigo-800 text-white py-2 px-4 rounded-md hover:bg-indigo-400 transition"
                                     >
                                         View Plan
                                     </button>

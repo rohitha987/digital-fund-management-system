@@ -123,7 +123,7 @@ const GroupDetails: React.FC = (GroupDetailsProp) => {
             });
             // Handle the plan data as needed
             console.log('Group Plan:', response.data);
-            navigate('/plan-month', { state: { results: response.data.results, totalProfit: response.data.totalProfit } });
+            navigate('/plan-month', { state: { groupId, results: response.data.results, totalProfit: response.data.totalProfit } });
             // Navigate or display the plan in a modal, etc.
         } catch (err) {
             console.error('Error fetching group plan:', err);
@@ -143,6 +143,7 @@ const GroupDetails: React.FC = (GroupDetailsProp) => {
             });
             if(response.status===200)
                 console.log(`Accepted ${userId}`);
+                window.location.reload()
             // Optionally refresh participants or handle UI changes
         } catch (err) {
             console.error('Error accepting participant:', err);
@@ -171,12 +172,12 @@ const GroupDetails: React.FC = (GroupDetailsProp) => {
     if (error) return <div className="text-red-500">{error}</div>;
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-red-200 to-blue-200 py-10 px-4">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-green-100 py-10 px-4">
             <div className="w-full max-w-4xl bg-white p-8 rounded-lg shadow-md">
                 {group ? (
                     <>
                         <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-3xl font-semibold text-center text-blue-700">{group.groupName}</h2>
+                            <h2 className="text-3xl font-semibold text-center text-red-700">{group.groupName}</h2>
                             {user?.userRole === 'organizer' && (
                             <div className="relative">
                                 <button
@@ -226,7 +227,7 @@ const GroupDetails: React.FC = (GroupDetailsProp) => {
                         <h3 className="text-xl font-semibold mt-6 mb-4">Participants:</h3>
                         <ul className="space-y-2 mb-6">
                             {participants.map(participant => (
-                                <li key={participant.userId} className="flex items-center justify-between text-gray-700">
+                                <li key={participant.userId} className="flex items-center font-semibold justify-between text-gray-700">
                                     {participant.userName}
                                     {/* <button
                                         className="text-blue-600 hover:underline"
@@ -249,7 +250,7 @@ const GroupDetails: React.FC = (GroupDetailsProp) => {
 
                         {user?.userRole === 'participant' && (
                             <button
-                                className="w-full bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-600 transition mb-6"
+                                className="w-full bg-green-800 text-white py-2 px-4 rounded-md hover:bg-green-400 transition mb-6"
                                 onClick={() => navigate(`/groups/${groupId}/installments`)}
                             >
                                 My Installments
@@ -257,7 +258,7 @@ const GroupDetails: React.FC = (GroupDetailsProp) => {
                         )}
 
                         <button
-                            className="w-full bg-red-700 text-white py-2 px-4 rounded-md hover:bg-red-500 transition mb-6"
+                            className="w-full bg-indigo-800 text-white py-2 px-4 rounded-md hover:bg-indigo-400 transition mb-6"
                             onClick={handleViewAllGroupTransactions}
                         >
                             View All Group Transactions

@@ -56,7 +56,7 @@ const EditProfile: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-red-200 to-blue-200">
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-green-100">
             <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Edit Your Profile</h2>
                 {error && <div className="text-red-500 mb-4 text-center">{error}</div>}
@@ -92,7 +92,7 @@ const EditProfile: React.FC = () => {
                     </div>
                     <button
                         type="submit"
-                        className="flex items-center justify-center mt-4 w-full bg-red-700 text-white p-3 rounded-lg shadow-md hover:bg-red-500 transition-colors duration-200"
+                        className="flex items-center justify-center mt-4 w-full bg-indigo-800 text-white p-3 rounded-lg shadow-md hover:bg-indigo-400 transition-colors duration-200"
                     >
                         <FaSave className="mr-2" />
                         Save Changes

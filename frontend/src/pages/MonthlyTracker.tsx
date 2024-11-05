@@ -32,7 +32,6 @@ const MonthlyTracker: React.FC = () => {
             return;
         }
 
-        // Check if the user has the "participant" role
         if (user.userRole !== 'participant') {
             setError('Access denied. Only participants can view this page.');
             return;
@@ -104,36 +103,36 @@ const MonthlyTracker: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center py-8">
-            <h2 className="text-2xl font-semibold mb-6">Installment Tracker</h2>
+        <div className="min-h-screen flex flex-col items-center justify-center py-8 bg-gradient-to-br from-blue-100 to-green-100">
+            <h2 className="text-3xl font-semibold text-gray-800 mb-6">Installment Tracker</h2>
 
             <button
-                className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition mb-4"
+                className="bg-green-500 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-green-400 transition duration-300 ease-in-out transform hover:scale-105 mb-6"
                 onClick={handlePay}
             >
                 Pay
             </button>
 
-            <div className="w-full max-w-2xl bg-white p-4 rounded-lg shadow-md">
+            <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg overflow-hidden">
                 {installments.length > 0 ? (
-                    <table className="min-w-full bg-white border rounded-lg">
+                    <table className="w-full border-collapse text-left">
                         <thead>
-                            <tr>
-                                <th className="py-2 px-4 border-b">Month</th>
-                                <th className="py-2 px-4 border-b">Ticket Value</th>
-                                <th className="py-2 px-4 border-b">Status</th>
+                            <tr className="bg-indigo-800 text-white">
+                                <th className="py-3 px-6 font-medium text-lg">Month</th>
+                                <th className="py-3 px-6 font-medium text-lg">Ticket Value</th>
+                                <th className="py-3 px-6 font-medium text-lg">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {installments.map((installment, index) => (
-                                <tr key={index}>
-                                    <td className="py-2 px-4 border-b">{installment.monthName}</td>
-                                    <td className="py-2 px-4 border-b">${installment.ticketValue}</td>
-                                    <td className="py-2 px-4 border-b">
+                                <tr key={index} className="hover:bg-gray-100 transition duration-150">
+                                    <td className="py-4 px-6 border-b text-gray-700">{installment.monthName}</td>
+                                    <td className="py-4 px-6 border-b text-gray-700">${installment.ticketValue}</td>
+                                    <td className="py-4 px-6 border-b">
                                         {installment.isPaid ? (
-                                            <span className="text-green-500">Paid</span>
+                                            <span className="inline-block px-3 py-1 rounded-full text-green-700 bg-green-200">Paid</span>
                                         ) : (
-                                            <span className="text-red-500">Unpaid</span>
+                                            <span className="inline-block px-3 py-1 rounded-full text-red-700 bg-red-200">Unpaid</span>
                                         )}
                                     </td>
                                 </tr>
@@ -141,7 +140,7 @@ const MonthlyTracker: React.FC = () => {
                         </tbody>
                     </table>
                 ) : (
-                    <p>No installments available.</p>
+                    <p className="p-4 text-gray-500 text-center">No installments available.</p>
                 )}
             </div>
         </div>
