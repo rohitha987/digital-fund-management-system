@@ -86,20 +86,20 @@ const MyTransaction: React.FC = () => {
 
                 <table className="min-w-full bg-white border rounded-lg">
                     <thead>
-                        <tr>
-                            <th className="py-2 px-4 border-b">Transaction ID</th>
-                            <th className="py-2 px-4 border-b">Amount</th>
-                            <th className="py-2 px-4 border-b">Date</th>
-                            <th className="py-2 px-4 border-b">Type</th>
-                            <th className="py-2 px-4 border-b">Group ID</th>
+                        <tr className="bg-gray-200">
+                            <th className="py-2 px-4 border-b text-left">Transaction ID</th>
+                            <th className="py-2 px-4 border-b text-right">Amount</th>
+                            <th className="py-2 px-4 border-b text-left">Date</th>
+                            <th className="py-2 px-4 border-b text-left">Type</th>
+                            <th className="py-2 px-4 border-b text-left">Group ID</th>
                         </tr>
                     </thead>
                     <tbody>
                         {sortedTransactions.length > 0 ? (
                             sortedTransactions.map(transaction => (
-                                <tr key={transaction.transactionId}>
+                                <tr key={transaction.transactionId} className="hover:bg-gray-100">
                                     <td className="py-2 px-4 border-b">{transaction.transactionId}</td>
-                                    <td className="py-2 px-4 border-b">${transaction.transactionAmount}</td>
+                                    <td className="py-2 px-4 border-b text-right">${transaction.transactionAmount.toFixed(2)}</td>
                                     <td className="py-2 px-4 border-b">{new Date(transaction.transactionDate).toLocaleDateString()}</td>
                                     <td className="py-2 px-4 border-b">{transaction.transactionType}</td>
                                     <td className="py-2 px-4 border-b">{transaction.groupId}</td>
