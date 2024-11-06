@@ -58,7 +58,7 @@ const GroupDetails: React.FC = (GroupDetailsProp) => {
                 setGroup(response.data);
 
                 const participantsData = await Promise.all(
-                    response.data.participants.map(async (userId: string) => {
+                    response.data.participants.map(async (userId: number) => {
                         const participantResponse = await axios.get(`http://localhost:3000/api/users/${userId}`, {
                             headers: {
                                 'Content-Type': 'application/json',

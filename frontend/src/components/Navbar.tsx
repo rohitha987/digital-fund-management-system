@@ -20,9 +20,11 @@ const Navbar: React.FC = () => {
       </div>
             <div className="space-x-6 flex items-center">
                 <Link to="/chitplans" className="text-gray-300 hover:text-white">Chit Plans</Link>
-                <Link to="/mygroups" className="text-gray-300 hover:text-white">My Groups</Link>
-                <Link to="/mytransactions" className="text-gray-300 hover:text-white">My Transactions</Link>
-                <Link to="/profile" className="text-gray-300 hover:text-white">Profile</Link>
+                {isAuthenticated && (
+                    <><Link to="/mygroups" className="text-gray-300 hover:text-white">My Groups</Link>
+                    <Link to="/mytransactions" className="text-gray-300 hover:text-white">My Transactions</Link>
+                    <Link to="/profile" className="text-gray-300 hover:text-white">Profile</Link></>
+                )}
 
                 {isAuthenticated ? (
                     <Link to="/">

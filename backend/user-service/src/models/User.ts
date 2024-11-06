@@ -7,7 +7,7 @@ export enum UserRole {
 }
 
 export interface User extends Document {
-    userId: number;
+    userId: string;
     userName: string;
     userEmail: string;
     password: string;
@@ -26,7 +26,7 @@ const counterSchema = new Schema({
 const Counter = mongoose.model('Counter', counterSchema);
 
 const userSchema: Schema = new Schema({
-    userId: { type: Number, unique: true },
+    userId: { type: String, unique: true },
     userName: { type: String, required: true },
     userEmail: { type: String, required: true },
     password: { type: String, required: true },
@@ -50,7 +50,7 @@ userSchema.pre("save", async function (next) {
             { $inc: { seq: 1 } },
             { new: true, upsert: true }
         );
-        user.userId = counter.seq;
+        user.userId = "user"+counter.seq;
         next();
     } catch (error) {
         next(error as CallbackError);
