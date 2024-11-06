@@ -70,7 +70,7 @@ export const getListOfGroups = async(req:Request, res:Response)=>{
       if(!groups){
         res.status(404).json({message:"Group not found"});
       }
-      console.log(groups);
+    //   console.log(groups);
       res.status(200).json(groups);
   }catch(error){
       res.status(400).json({message:error});

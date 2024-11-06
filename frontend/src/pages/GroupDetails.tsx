@@ -141,10 +141,10 @@ const GroupDetails: React.FC = (GroupDetailsProp) => {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`,
                 },
             });
-            if(response.status===200)
+            if(response.status===200){
                 console.log(`Accepted ${userId}`);
                 window.location.reload()
-            // Optionally refresh participants or handle UI changes
+            }
         } catch (err) {
             console.error('Error accepting participant:', err);
         }
@@ -160,9 +160,10 @@ const GroupDetails: React.FC = (GroupDetailsProp) => {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`,
                 },
             });
-            if(response.status===200)
+            if(response.status===200){
             console.log(`Rejected ${userId}`);
-            // Optionally refresh participants or handle UI changes
+            navigate(`/groups/${groupId}`);
+            }
         } catch (err) {
             console.error('Error rejecting participant:', err);
         }

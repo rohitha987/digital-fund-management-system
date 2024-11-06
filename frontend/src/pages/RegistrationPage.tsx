@@ -1,10 +1,11 @@
 // src/components/RegistrationPage.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const RegistrationPage: React.FC = () => {
   const initialFormData = {
-    userId: '',
+    // userId: '',
     userName: '',
     userEmail: '',
     password: '',
@@ -15,7 +16,7 @@ const RegistrationPage: React.FC = () => {
 
   const [formData, setFormData] = useState(initialFormData);
   const [errors, setErrors] = useState({
-    userId: '',
+    // userId: '',
     userName: '',
     userEmail: '',
     password: '',
@@ -24,13 +25,14 @@ const RegistrationPage: React.FC = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const validateField = (name: string, value: string) => {
     let errorMsg = '';
     switch (name) {
-      case 'userId':
-        if (!value.trim()) errorMsg = 'User ID is required.';
-        break;
+      // case 'userId':
+      //   if (!value.trim()) errorMsg = 'User ID is required.';
+      //   break;
       case 'userName':
         if (!value.trim()) errorMsg = 'Name is required.';
         break;
@@ -81,6 +83,9 @@ const RegistrationPage: React.FC = () => {
       setSuccess(true);
       setError(null);
       setFormData(initialFormData); // Clear the form data on success
+      setTimeout(() => {
+        navigate('/login'); // Navigate to profile after successful login
+    }, 2000);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         const errorMessage = err.response?.data.message || 'Registration failed. Please try again.';

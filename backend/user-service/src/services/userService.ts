@@ -46,7 +46,7 @@ class UserService {
         console.log(error);
       }
     };
-    console.log(result);
+    // console.log(result);
     return result;
   }
   // Other methods as needed
@@ -121,7 +121,7 @@ class UserService {
   }
 }
 
-async getIdByUserName(userName: string): Promise<string | null> {
+async getIdByUserName(userName: string): Promise<any | null> {
   try {
     // Find user by userName and select only the userId field
     const user = await User.findOne({ userName }).select('userId');

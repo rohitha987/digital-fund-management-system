@@ -42,6 +42,9 @@ const GroupForm: React.FC = () => {
                 ? (parseFloat(formData.totalAmount) / parseInt(formData.members)).toFixed(2)
                 : '0.00';
 
+            formData.organizerId = user.userId;
+            formData.duration = formData.members;
+
             const response = await axios.post('http://localhost:3000/api/groups', formData, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -139,7 +142,7 @@ const GroupForm: React.FC = () => {
 
                     className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-                <input type="text"
+                {/* <input type="text"
 
                     name="organizerId"
 
@@ -149,7 +152,7 @@ const GroupForm: React.FC = () => {
 
                     onChange={handleChange}
 
-                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" /> */}
 
                 <input type="text"
 
@@ -169,9 +172,9 @@ const GroupForm: React.FC = () => {
 
                     placeholder="Enter duration"
 
-                    value={formData.duration}
+                    value={formData.members}
 
-                    onChange={handleChange}
+                    readOnly
 
                     className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
