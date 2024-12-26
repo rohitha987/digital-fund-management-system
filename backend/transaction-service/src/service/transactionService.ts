@@ -51,25 +51,25 @@ export class TransactionService {
         await debitTransaction.save();
 
         // Step 2: Fetch Organizer ID from Group Service
-        const groupServiceUrl = `http://localhost:3003/api/groups/getOrganizer/${groupId}`; // Adjust the port and path as necessary
-        const response = await axios.get(groupServiceUrl);
+        // const groupServiceUrl = `http://localhost:3003/api/groups/getOrganizer/${groupId}`; // Adjust the port and path as necessary
+        // const response = await axios.get(groupServiceUrl);
         
-        if (!response.data.organizerId) {
-            throw new Error('Organizer not found for this group');
-        }
-        const organizerId = response.data.organizerId;
-        console.log("Organizer ID:", organizerId);
+        // if (!response.data.organizerId) {
+        //     throw new Error('Organizer not found for this group');
+        // }
+        // const organizerId = response.data.organizerId;
+        // console.log("Organizer ID:", organizerId);
         
         // Step 3: Create Credit Transaction for Organizer
         const creditTransaction = new transaction({
-            userId: organizerId, // Organizer ID
+            userId: transactionTo, // Organizer ID
             groupId,
             transactionAmount,
             transactionType: 'credit',
             transactionDate,
             transactionId: this.generateTransactionId(), // Generate a new transaction ID for the credit transaction
-            transactionFrom: transactionFrom || '', // Default to empty if not provided
-            transactionTo: organizerId, // The organizer will be the recipient in the credit transaction
+            transactionFrom: transactionFrom|| '', // Default to empty if not provided
+            transactionTo: transactionTo, // The organizer will be the recipient in the credit transaction
         });
         console.log("Credit Transaction:", creditTransaction);
         await creditTransaction.save();

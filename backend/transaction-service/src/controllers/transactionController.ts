@@ -54,7 +54,7 @@ export const getTransactionsByType: RequestHandler = async (req: Request, res: R
 
 export const createTransaction = async (req: Request, res: Response) => {
     try {
-        const { userId, groupId, transactionAmount, transactionType, transactionDate, transactionFrom, transactionTo } = req.body;
+        const { transactionId,userId, groupId, transactionAmount, transactionType, transactionDate, transactionFrom, transactionTo } = req.body;
         
         // Check if transactionFrom and transactionTo are provided
         if (!transactionFrom || !transactionTo) {
@@ -62,6 +62,7 @@ export const createTransaction = async (req: Request, res: Response) => {
         }
 
         const transactionData = {
+            transactionId,
             userId,
             groupId,
             transactionAmount,

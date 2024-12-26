@@ -224,53 +224,85 @@ const calculateChitDetails = (totalAmount: number, months: number, members: numb
 };
 
 export const displayMonthlyPlan = async (req: Request, res: Response) => {
-    const { groupId } = req.params; // Assuming groupId is passed as a URL parameter
-    const { createdAt, totalAmount, duration, interest } = req.body;
-    const months = duration;
-
-    if (!groupId || !createdAt || !totalAmount || months <= 0 || totalAmount <= 0) {
-        return res.status(400).json({ message: "Please provide valid values for groupId, createdAt, totalAmount, and months." });
-    }
-
     try {
         // Calculate monthly plan details using a helper function
+        const group = await Group.findOne({ groupId: req.params.groupId });
+        if (!group) {
+            return res.status(404).json({ message: "Group not found" });
+        }
+        const { createdAt, totalAmount, duration, interest } = req.body;
+        const months = duration;
+
+        if (!createdAt || !totalAmount || months <= 0 || totalAmount <= 0) {
+            return res.status(400).json({ message: "Please provide valid values for groupId, createdAt, totalAmount, and months." });
+        }
         const { results } = calculateChitDetails(totalAmount, months, months, interest);
 
-        // Fetch participants from group-service
-        const participantsResponse = await axios.get(`http://localhost:3003/api/groups/${groupId}/participants`);
-        const participants = participantsResponse.data.participants;
-        const userNames = participants.map((participant: any) => participant.userName);
+        const monthlyDraw = group.monthlyDraw;
+        const participantsResponse = await axios.get(`http://localhost:3003/api/groups/${req.params.groupId}/participants`);
+        const userNames = participantsResponse.data.participants.map((participant: any) => participant.userName);
 
         // Shuffle usernames randomly
         const shuffledUserNames = userNames.sort(() => Math.random() - 0.5);
 
-        // Create an array of userNames corresponding to each month
-        const monthlyDraw = [];
-        for (let i = 0; i < results.length; i++) {
-            monthlyDraw.push(shuffledUserNames[i % shuffledUserNames.length]); // Assign users to each month
+        if (monthlyDraw.length === 0) {
+            // Loop through results and assign each month a unique user by cycling through the shuffled list
+            for (let i = 0; i < results.length; i++) {
+                monthlyDraw.push(shuffledUserNames[i % shuffledUserNames.length]);
+            }
         }
 
-        console.log(monthlyDraw);
-
-        console.log(groupId);
-
         // Update the group with the monthlyDraw array
-        const updatedGroup = await Group.findOneAndUpdate(
-            { groupId }, // Find the group by its ID
-            { monthlyDraw },   // Update the monthlyDraw field with userNames
-            { new: true }      // Return the updated document
-        );
-
+        const updatedGroup = await group.save();
         return res.status(200).json({ results, monthlyDraw });
-    } catch (error) {
+    } 
+    catch (error) {
         console.error("Error fetching participants or updating group:", error);
         return res.status(500).json({ message: "An error occurred while processing the request." });
     }
 };
 
+// export const displayMonthlyPlan = async (req: Request, res: Response) => {
+//     const { groupId } = req.params; // Assuming groupId is passed as a URL parameter
+//     const { createdAt, totalAmount, duration, interest } = req.body;
+//     const months = duration;
 
+//     if (!groupId || !createdAt || !totalAmount || months <= 0 || totalAmount <= 0) {
+//         return res.status(400).json({ message: "Please provide valid values for groupId, createdAt, totalAmount, and months." });
+//     }
 
+//     try {
+//         // Calculate monthly plan details using a helper function
+//         const { results } = calculateChitDetails(totalAmount, months, months, interest);
 
+//         // Fetch participants from group-service
+//         const participantsResponse = await axios.get(`http://localhost:3003/api/groups/${groupId}/participants`);
+//         const participants = participantsResponse.data.participants;
+//         const userNames = participants.map((participant: any) => participant.userName);
 
+//         // Shuffle usernames randomly
+//         const shuffledUserNames = userNames.sort(() => Math.random() - 0.5);
 
-// Example route
+//         // Create an array of userNames corresponding to each month
+//         const monthlyDraw = [];
+//         for (let i = 0; i < results.length; i++) {
+//             monthlyDraw.push(shuffledUserNames[i % shuffledUserNames.length]); // Assign users to each month
+//         }
+
+//         console.log(monthlyDraw);
+
+//         console.log(groupId);
+
+//         // Update the group with the monthlyDraw array
+//         const updatedGroup = await Group.findOneAndUpdate(
+//             { groupId }, // Find the group by its ID
+//             { monthlyDraw },   // Update the monthlyDraw field with userNames
+//             { new: true }      // Return the updated document
+//         );
+
+//         return res.status(200).json({ results, monthlyDraw });
+//     } catch (error) {
+//         console.error("Error fetching participants or updating group:", error);
+//         return res.status(500).json({ message: "An error occurred while processing the request." });
+//     }
+// };
