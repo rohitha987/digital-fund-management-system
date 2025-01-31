@@ -1,0 +1,73 @@
+<div *ngIf="loading" class="text-center text-lg font-bold text-gray-700">
+    Loading...
+  </div>
+  
+  <div *ngIf="error" class="text-center text-red-500 font-semibold">
+    {{ error }}
+  </div>
+  
+  <div *ngIf="group && !loading" class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-200 to-green-200 py-10 px-4">
+    <div class="w-full max-w-4xl bg-white p-8 rounded-lg shadow-xl">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-semibold text-center text-red-700">{{ group.groupName }}</h2>
+      </div>
+  
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-gray-700">
+        <p><span class="font-semibold">Type:</span> {{ group.groupType }}</p>
+        <p><span class="font-semibold">Interest:</span> {{ group.interest }}%</p>
+        <p><span class="font-semibold">Members:</span> {{ group.members }}</p>
+        <p><span class="font-semibold">Duration:</span> {{ group.duration }} months</p>
+        <p><span class="font-semibold">Total Amount:</span> ${{ group.totalAmount }}</p>
+        <p><span class="font-semibold">Ticket Value:</span> ${{ group.ticketValue }}</p>
+        <p><span class="font-semibold">Start Date:</span> {{ formatDate(group.createdAt) }}</p>
+        <p><span class="font-semibold">End Date:</span> {{ getEndDate(group.createdAt, group.duration) }}</p>
+      </div>
+  
+      <p class="text-gray-600 mb-6">{{ group.description }}</p>
+  
+      <h3 class="text-xl font-semibold mt-6 mb-4">Participants:</h3>
+      <ul class="space-y-4 mb-6">
+        <li *ngFor="let participant of participants" class="flex items-center justify-between bg-gray-50 p-4 rounded-md shadow-sm hover:shadow-md transition">
+          <span class="font-semibold">{{ participant.userName }}</span>
+          <button class="text-blue-600 hover:underline" (click)="handleViewTransactions(participant.userId)">
+            View Transactions
+          </button>
+        </li>
+      </ul>
+  
+      <button
+        *ngIf="(authService.user$ | async)?.userRole === 'organizer'"
+        class="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition mb-6"
+        (click)="handleViewPlan()"
+      >
+        View Monthly Plan
+      </button>
+  
+      <button
+        *ngIf="(authService.user$ | async)?.userRole === 'participant'"
+        class="w-full bg-green-800 text-white py-2 px-4 rounded-md hover:bg-green-400 transition mb-6"
+        (click)="router.navigate(['/groups', groupId, 'installments'])"
+      >
+        My Installments
+      </button>
+  
+      <button
+        class="w-full bg-indigo-800 text-white py-2 px-4 rounded-md hover:bg-indigo-400 transition mb-6"
+        (click)="handleViewAllGroupTransactions()"
+      >
+        View All Group Transactions
+      </button>
+  
+      <div *ngIf="transactions.length > 0">
+        <h4 class="text-xl font-semibold mt-4 mb-2">All Group Transactions</h4>
+        <ul class="space-y-2">
+          <li *ngFor="let transaction of transactions" class="flex justify-between bg-gray-100 p-3 rounded-md">
+            <span>{{ transaction.transactionDate }}</span>
+            <span>${{ transaction.transactionAmount }}</span>
+            <span>{{ transaction.transactionType }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  

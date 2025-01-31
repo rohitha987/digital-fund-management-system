@@ -1,0 +1,46 @@
+<!-- monthly-tracker.component.html -->
+<div class="min-h-screen flex flex-col items-center justify-center py-8 bg-gradient-to-br from-blue-100 to-green-100">
+  <h2 class="text-3xl font-semibold text-gray-800 mb-6">Installment Tracker</h2>
+
+  <button
+    class="bg-green-500 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-green-400 transition duration-300 ease-in-out transform hover:scale-105 mb-6"
+    (click)="handlePay()"
+  >
+    Pay
+  </button>
+
+  <div class="w-full max-w-3xl bg-white rounded-lg shadow-lg overflow-hidden">
+    <table *ngIf="installments.length > 0; else noInstallments" class="w-full border-collapse text-left">
+      <thead>
+        <tr class="bg-indigo-800 text-white">
+          <th class="py-3 px-6 font-medium text-lg">Month</th>
+          <th class="py-3 px-6 font-medium text-lg">Ticket Value</th>
+          <th class="py-3 px-6 font-medium text-lg">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let installment of installments" class="hover:bg-gray-100 transition duration-150">
+          <td class="py-4 px-6 border-b text-gray-700">{{ installment.monthName }}</td>
+          <td class="py-4 px-6 border-b text-gray-700">${{ installment.ticketValue }}</td>
+          <td class="py-4 px-6 border-b">
+            <span
+              *ngIf="installment.isPaid"
+              class="inline-block px-3 py-1 rounded-full text-green-700 bg-green-200"
+              >Paid</span
+            >
+            <span
+              *ngIf="!installment.isPaid"
+              class="inline-block px-3 py-1 rounded-full text-red-700 bg-red-200"
+              >Unpaid</span
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #noInstallments>
+      <p class="p-4 text-gray-500 text-center">No installments available.</p>
+    </ng-template>
+  </div>
+
+  <div *ngIf="error" class="text-red-500 mt-4">{{ error }}</div>
+</div>

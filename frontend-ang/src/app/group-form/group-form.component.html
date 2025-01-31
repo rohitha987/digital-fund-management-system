@@ -1,0 +1,81 @@
+<div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-green-100 py-10 px-4">
+    <div class="w-full max-w-4xl bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-2xl font-semibold text-center mb-6 text-gray-800">Group Details</h2>
+  
+      <div *ngIf="error" class="text-red-500 mb-4 text-center">{{ error }}</div>
+  
+      <form (ngSubmit)="handleSubmit($event)" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  
+          <input type="text"
+                 name="groupId"
+                 placeholder="Enter group Id"
+                 [(ngModel)]="formData.groupId"
+                 (ngModelChange)="handleChange($event)"
+                 class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  
+          <input type="text"
+                 name="groupName"
+                 placeholder="Enter group name"
+                 [(ngModel)]="formData.groupName"
+                 (ngModelChange)="handleChange($event)"
+                 class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  
+          <input type="number"
+                 name="members"
+                 placeholder="Enter number of members"
+                 [(ngModel)]="formData.members"
+                 (ngModelChange)="handleChange($event)"
+                 class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  
+          <input type="number"
+                 name="totalAmount"
+                 placeholder="Enter total amount"
+                 [(ngModel)]="formData.totalAmount"
+                 (ngModelChange)="handleChange($event)"
+                 class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  
+          <input type="text"
+                 name="interest"
+                 placeholder="Enter group interest"
+                 [(ngModel)]="formData.interest"
+                 (ngModelChange)="handleChange($event)"
+                 class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  
+          <input type="text"
+                 name="groupType"
+                 placeholder="Enter group type"
+                 [(ngModel)]="formData.groupType"
+                 (ngModelChange)="handleChange($event)"
+                 class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  
+          <input type="text"
+                 name="duration"
+                 placeholder="Enter duration"
+                 [value]="formData.members"
+                 readOnly
+                 class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  
+          <input type="number"
+                 name="ticketValue"
+                 placeholder="Ticket Value (calculated)"
+                 [value]="formatTicketValue()"
+                 readOnly
+                 class="w-full p-3 border border-gray-300 rounded-md bg-gray-100" />
+  
+        </div>
+  
+        <textarea name="description"
+                  placeholder="Enter group description"
+                  [(ngModel)]="formData.description"
+                  (ngModelChange)="handleChange($event)"
+                  class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+  
+        <button type="submit"
+                class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition duration-200">
+          Save
+        </button>
+      </form>
+    </div>
+  </div>
+  

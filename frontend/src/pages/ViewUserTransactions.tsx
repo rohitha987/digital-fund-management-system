@@ -76,7 +76,7 @@ const ViewUserTransactions: React.FC = () => {
                                     </div>
                                     <div
                                         className={`text-lg font-semibold ${
-                                            transaction.transactionType === 'Payment'
+                                            transaction.transactionType === 'credit'
                                                 ? 'text-green-500'
                                                 : 'text-red-500'
                                         }`}

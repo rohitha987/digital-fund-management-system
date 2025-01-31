@@ -1,0 +1,72 @@
+/* Add your custom styles here to override or add to the default styling */
+
+.bg-cover {
+    background-size: cover;
+  }
+  
+  .bg-center {
+    background-position: center;
+  }
+  
+  h2, h3, h4 {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .text-4xl {
+    font-size: 2.25rem;
+  }
+  
+  .text-2xl {
+    font-size: 1.5rem;
+  }
+  
+  .text-lg {
+    font-size: 1.125rem;
+  }
+  
+  .text-gray-700 {
+    color: #4a4a4a;
+  }
+  
+  .text-blue-700 {
+    color: #1d4ed8;
+  }
+  
+  .bg-gray-50 {
+    background-color: #f9fafb;
+  }
+  
+  .bg-blue-100 {
+    background-color: #ebf4ff;
+  }
+  
+  .bg-white {
+    background-color: #ffffff;
+  }
+  
+  .shadow-lg {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .transition-transform {
+    transition: transform 0.3s;
+  }
+  
+  .hover\:scale-105:hover {
+    transform: scale(1.05);
+  }
+  
+  .hover\:shadow-2xl:hover {
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  }
+  
+  .px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .py-8 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  

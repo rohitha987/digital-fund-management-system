@@ -12,7 +12,7 @@ app.use(express.json());
 
 // Middleware
 app.use(cors({
-    origin: 'http://localhost:3002', // URL of your frontend
+    origin: 'http://localhost:4200', // URL of your frontend
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -22,7 +22,7 @@ app.use(cors({
 
 // Middleware
 app.use(cors({
-    origin: 'http://localhost:3005', // URL of your frontend
+    origin: 'http://localhost:4200', // URL of your frontend
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']

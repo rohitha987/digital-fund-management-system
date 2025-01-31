@@ -1,0 +1,31 @@
+
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-green-100 py-12 px-6">
+    <div class="w-full max-w-md bg-white rounded-lg shadow-xl p-8">
+      <h2 class="text-3xl font-semibold text-center text-indigo-900 mb-6">Pay Installment</h2>
+      <form (ngSubmit)="handleSubmit()">
+        <p class="mb-4 text-gray-700 text-lg">
+          <strong>Month:</strong> {{ monthName }}
+        </p>
+        <p class="mb-6 text-gray-700 text-lg">
+          <strong>Ticket Value:</strong> ${{ ticketValue }}
+        </p>
+        <label for="amount" class="block text-gray-600 text-lg mb-2">Amount</label>
+        <input
+          id="amount"
+          type="number"
+          [(ngModel)]="amount"
+          name="amount"
+          class="w-full mb-4 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          required
+        />
+        <p *ngIf="error" class="text-red-500 mb-4 text-center">{{ error }}</p>
+        <button
+          type="submit"
+          class="w-full bg-indigo-800 text-white py-3 rounded-lg font-medium hover:bg-indigo-600 transition duration-200"
+        >
+          Confirm Payment
+        </button>
+      </form>
+    </div>
+  </div>
+  

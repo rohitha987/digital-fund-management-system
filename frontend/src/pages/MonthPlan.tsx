@@ -11,7 +11,7 @@ interface GroupData {
   totalAmount: number;
   duration: number;
   interest: number;
-  organizerId:string;
+  organizerId: string;
   monthlyDraw: string[];
 }
 
@@ -33,6 +33,7 @@ const MonthlyPlan: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [showPayForm, setShowPayForm] = useState<boolean>(false);
   const [selectedEntry, setSelectedEntry] = useState<MonthlyPlanEntry | null>(null);
+  const [showSuccessPopup, setShowSuccessPopup] = useState<boolean>(false); 
 
   useEffect(() => {
     const fetchGroupData = async () => {
@@ -67,6 +68,7 @@ const MonthlyPlan: React.FC = () => {
       const { createdAt, totalAmount, interest, duration, monthlyDraw } = groupData;
 
       try {
+        // Fetch the monthly plan
         const response = await axios.post(
           `http://localhost:3003/api/groups/${groupId}/plan`,
           { createdAt, totalAmount, interest, duration },
@@ -78,11 +80,35 @@ const MonthlyPlan: React.FC = () => {
           }
         );
 
-        const monthlyResults = response.data.results.map((entry: any, index: number) => ({
-          ...entry,
-          userName: monthlyDraw[index] || "N/A",
-          status: entry.status || "Unpaid", // Default to "Unpaid" if status is missing
-        }));
+        // Fetch transactions for the group
+        const transactionResponse = await axios.get(
+          `http://localhost:3000/api/transactions/find/group/${groupId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            },
+          }
+        );
+
+        const transactions = transactionResponse.data;
+
+        // Map monthly plan entries with status based on transactions
+        const monthlyResults = response.data.results.map((entry: any, index: number) => {
+          const isPaid = transactions.some((transaction: any) => {
+            return (
+              transaction.transactionAmount === parseFloat(entry.amount) &&
+              transaction.transactionDate.includes(entry.month) &&
+              transaction.transactionType === "debit"
+            );
+          });
+
+          return {
+            ...entry,
+            userName: monthlyDraw[index] || "N/A",
+            status: isPaid ? "Paid" : "Unpaid",
+          };
+        });
 
         setResults(monthlyResults);
       } catch (err) {
@@ -105,26 +131,25 @@ const MonthlyPlan: React.FC = () => {
     const transactionId = generateTransactionId();
     try {
       const response = await axios.get(`http://localhost:3002/api/users/name/${selectedEntry.userName}`);
-      console.log(response);
       await axios.post(
         `http://localhost:3000/api/transactions`,
         {
-            transactionId,
-            userId: groupData?.organizerId,
-            groupId,
-            transactionAmount: selectedEntry.amount,
-            transactionType: 'debit', // Assuming the user is making a payment (debit)
-            transactionDate: new Date().toISOString(),
-            transactionFrom: groupData?.organizerId, // Sender is the user making the payment
-            transactionTo: response.data, // Recipient is the group organizer
+          transactionId,
+          userId: groupData?.organizerId,
+          groupId,
+          transactionAmount: selectedEntry.amount,
+          transactionType: "debit",
+          transactionDate: new Date().toISOString(),
+          transactionFrom: groupData?.organizerId,
+          transactionTo: response.data,
         },
         {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-            },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
         }
-    );
+      );
 
       // Update the entry status to "Paid"
       setResults((prevResults) =>
@@ -134,11 +159,15 @@ const MonthlyPlan: React.FC = () => {
       );
 
       setShowPayForm(false);
-      setSelectedEntry(null);
+      setShowSuccessPopup(true); // Show the success popup
     } catch (err) {
       setError("Error processing payment.");
       console.error(err);
     }
+  };
+
+  const closeSuccessPopup = () => {
+    setShowSuccessPopup(false);
   };
 
   if (loading) {
@@ -208,6 +237,21 @@ const MonthlyPlan: React.FC = () => {
           >
             Confirm Payment
           </button>
+        </div>
+      )}
+
+      {showSuccessPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <h3 className="text-xl font-semibold mb-4">Payment Successful</h3>
+            <p>Your payment has been processed successfully!</p>
+            <button
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+              onClick={closeSuccessPopup}
+            >
+              Close
+            </button>
+          </div>
         </div>
       )}
     </div>

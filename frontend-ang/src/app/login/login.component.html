@@ -1,0 +1,53 @@
+<!-- src/app/login/login.component.html -->
+
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <h2 class="text-2xl font-bold text-center mb-6">Login</h2>
+      
+      <!-- Success Alert -->
+      <div *ngIf="success" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+        <span class="block sm:inline">Login successful! Redirecting...</span>
+      </div>
+      
+      <!-- Error Alert -->
+      <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+        <span class="block sm:inline">{{ error }}</span>
+      </div>
+  
+      <!-- Login Form -->
+      <form (ngSubmit)="handleSubmit($event)">
+        <div class="mb-4">
+          <label class="block text-sm font-semibold mb-2" for="userEmail">Email</label>
+          <input 
+            type="email" 
+            name="userEmail" 
+            id="userEmail" 
+            [(ngModel)]="formData.userEmail" 
+            required 
+            class="w-full p-2 border rounded-md" 
+          />
+        </div>
+  
+        <div class="mb-4">
+          <label class="block text-sm font-semibold mb-2" for="password">Password</label>
+          <input 
+            type="password" 
+            name="password" 
+            id="password" 
+            [(ngModel)]="formData.password" 
+            required 
+            class="w-full p-2 border rounded-md" 
+          />
+        </div>
+  
+        <button 
+          type="submit" 
+          class="w-full bg-indigo-800 text-white p-2 rounded-md hover:bg-indigo-400"
+        >
+          Login
+        </button>
+      </form>
+    </div>
+  </div>
+  
+  

@@ -42,6 +42,8 @@ const GroupDetails: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
     const [requests, setRequests] = useState<Participant[]>([]);
+    const [showSuccessPopup, setShowSuccessPopup] = useState<boolean>(false);
+     // Success popup state
 
     const navigate = useNavigate();
 
@@ -132,6 +134,13 @@ const GroupDetails: React.FC = () => {
     };
 
     const handleAccept = async (userId: string) => {
+        if (!group) return;
+    
+        if (participants.length >= group.members) {
+            setError("Cannot accept participant. The group is already full.");
+            return;
+        }
+    
         try {
             const response = await axios.post(
                 `http://localhost:3000/api/users/${groupId}/join-request/${userId}`,
@@ -143,6 +152,7 @@ const GroupDetails: React.FC = () => {
                     },
                 }
             );
+    
             if (response.status === 200) {
                 console.log(`Accepted ${userId}`);
                 window.location.reload();
@@ -151,6 +161,7 @@ const GroupDetails: React.FC = () => {
             console.error('Error accepting participant:', err);
         }
     };
+    
 
     const handleReject = async (userId: string) => {
         try {
@@ -171,6 +182,16 @@ const GroupDetails: React.FC = () => {
         } catch (err) {
             console.error('Error rejecting participant:', err);
         }
+    };
+
+    const formatDate = (date: Date): string => {
+        return new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date(date));
+    };
+
+    const getEndDate = (startDate: Date, duration: number): string => {
+        const endDate = new Date(startDate);
+        endDate.setMonth(endDate.getMonth() + duration-1);
+        return formatDate(endDate);
     };
 
     if (loading) return <div className="text-center text-lg font-bold text-gray-700">Loading...</div>;
@@ -230,6 +251,8 @@ const GroupDetails: React.FC = () => {
                             <p><span className="font-semibold">Duration:</span> {group.duration} months</p>
                             <p><span className="font-semibold">Total Amount:</span> ${group.totalAmount}</p>
                             <p><span className="font-semibold">Ticket Value:</span> ${group.ticketValue}</p>
+                            <p><span className="font-semibold">Start Date:</span> {formatDate(group.createdAt)}</p>
+                            <p><span className="font-semibold">End Date:</span> {getEndDate(group.createdAt, group.duration)}</p>
                         </div>
                         <p className="text-gray-600 mb-6">{group.description}</p>
 

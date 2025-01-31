@@ -1,0 +1,58 @@
+<div class="p-6 bg-gray-100 min-h-screen">
+    <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Monthly Plan</h2>
+    
+    <div *ngIf="loading" class="text-center py-4 text-blue-600">Loading...</div>
+    <div *ngIf="error" class="text-center text-red-600">{{ error }}</div>
+    
+    <div *ngIf="!loading && !error">
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white shadow rounded-lg">
+          <thead class="bg-gray-200">
+            <tr>
+              <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Month</th>
+              <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Amount</th>
+              <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Commission</th>
+              <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Amount Given</th>
+              <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Assigned User</th>
+              <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Status</th>
+              <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entry of results" [ngClass]="{'even:bg-gray-50': isMonthEven(entry.month)}">
+              <td class="py-3 px-4 text-sm text-gray-700">{{ entry.month }}</td>
+              <td class="py-3 px-4 text-sm text-gray-700">{{ entry.amount }}</td>
+              <td class="py-3 px-4 text-sm text-gray-700">{{ entry.commission }}</td>
+              <td class="py-3 px-4 text-sm text-gray-700">{{ entry.amountGiven }}</td>
+              <td class="py-3 px-4 text-sm text-gray-700">{{ entry.userName }}</td>
+              <td class="py-3 px-4 text-sm text-gray-700">{{ entry.status }}</td>
+              <td class="py-3 px-4 text-sm text-gray-700">
+                <button *ngIf="entry.status === 'Unpaid'" class="bg-blue-500 text-white px-4 py-2 rounded" (click)="handlePayClick(entry)">
+                  Pay
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <!-- Payment Form -->
+      <div *ngIf="showPayForm && selectedEntry" class="mt-6 bg-white p-4 shadow rounded-lg">
+        <h3 class="text-xl font-semibold mb-4">Payment Details</h3>
+        <p><strong>Month:</strong> {{ selectedEntry.month }}</p>
+        <p><strong>User Name:</strong> {{ selectedEntry.userName }}</p>
+        <p><strong>Amount:</strong> {{ selectedEntry.amount }}</p>
+        <button class="mt-4 bg-green-500 text-white px-4 py-2 rounded" (click)="handleSubmitPayment()">Confirm Payment</button>
+      </div>
+  
+      <!-- Success Popup -->
+      <div *ngIf="showSuccessPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+          <h3 class="text-xl font-semibold mb-4">Payment Successful</h3>
+          <p>Your payment has been processed successfully!</p>
+          <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded" (click)="closeSuccessPopup()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

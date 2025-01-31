@@ -1,0 +1,36 @@
+<nav class="flex justify-between items-center p-4 bg-black shadow-md w-full">
+  <div class="flex items-center">
+    <a href="/">
+      <img src="image (3).png" alt="Logo" class="md:h-12 lg:h-14 ml-7" />
+    </a>
+    <!-- <span class="ml-3 text-lg font-semibold text-white">Digital Chit Fund Management</span> -->
+  </div>
+
+  <div class="space-x-6 flex items-center">
+    <a href="/chitplans" class="text-gray-300 hover:text-white">Chit Plans</a>
+
+    <ng-container *ngIf="isAuthenticated">
+      <a href="/mygroups" class="text-gray-300 hover:text-white">My Groups</a>
+      <a href="/mytransactions" class="text-gray-300 hover:text-white">My Transactions</a>
+      <a href="/profile" class="text-gray-300 hover:text-white">Profile</a>
+      <button 
+        (click)="handleLogout()" 
+        class="px-4 py-1 border border-gray-500 text-gray-300 rounded-md hover:bg-gray-700 hover:text-white transition-colors duration-200">
+        Logout
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="!isAuthenticated">
+      <a href="/login">
+        <button class="px-4 py-1 border border-gray-500 text-gray-300 rounded-md hover:bg-gray-700 hover:text-white transition-colors duration-200">
+          Log In
+        </button>
+      </a>
+      <a href="/register">
+        <button class="px-4 py-1 bg-indigo-800 text-white rounded-md hover:bg-indigo-400 transition-colors duration-200">
+          Register
+        </button>
+      </a>
+    </ng-container>
+  </div>
+</nav>

@@ -1,0 +1,51 @@
+<!-- src/app/view-user-transactions/view-user-transactions.component.html -->
+<div *ngIf="loading" class="text-center text-lg font-bold text-gray-700">
+    Loading...
+  </div>
+  
+  <div *ngIf="error" class="text-center text-red-500 font-semibold">
+    {{ error }}
+  </div>
+  
+  <div *ngIf="!loading && transactions.length > 0" class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-200 to-green-300 py-10 px-4">
+    <div class="w-full max-w-4xl bg-white p-8 rounded-xl shadow-2xl">
+      <h2 class="text-4xl font-extrabold text-center text-blue-600 mb-6">User Transactions</h2>
+      <h3 class="text-xl font-semibold text-center text-gray-800 mb-6">Group ID: {{ groupId }}</h3>
+  
+      <div class="space-y-6">
+        <div
+          *ngFor="let transaction of transactions"
+          class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+        >
+          <div class="flex justify-between items-center mb-4">
+            <div class="text-lg font-semibold text-gray-700">
+              <span class="text-gray-500">Date: </span> {{ formatDate(transaction.transactionDate) }}
+            </div>
+            <div
+              class="text-lg font-semibold"
+              [ngClass]="{
+                'text-green-500': transaction.transactionType === 'credit',
+                'text-red-500': transaction.transactionType === 'debit'
+              }"
+            >
+              {{ transaction.transactionType }}
+            </div>
+          </div>
+  
+          <div class="text-xl font-bold text-gray-800 mb-2">
+            ${{ transaction.transactionAmount.toFixed(2) }}
+          </div>
+  
+          <div class="text-sm text-gray-600">
+            <span class="font-semibold">Transaction ID: </span>
+            {{ transaction.transactionId }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="!loading && transactions.length === 0" class="text-center text-gray-600">
+    No transactions available for this user.
+  </div>
+  

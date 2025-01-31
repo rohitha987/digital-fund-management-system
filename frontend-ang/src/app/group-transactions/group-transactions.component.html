@@ -1,0 +1,54 @@
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-50 py-10 px-4">
+    <div class="w-full max-w-4xl bg-white p-8 rounded-lg shadow-md">
+      <h2 class="text-3xl font-semibold text-center mb-6 text-blue-600">All Transactions for Group</h2>
+  
+      <div *ngIf="error" class="text-red-500">{{ error }}</div>
+  
+      <div class="flex justify-center space-x-4 mb-6">
+        <button
+          class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition"
+          (click)="filterDebits()"
+        >
+          Show All
+        </button>
+  
+        <select
+          (change)="onMonthSelect($event)"
+          class="bg-gray-200 py-2 px-4 rounded-md text-gray-700"
+        >
+          <option value="">Select Month</option>
+          <option *ngFor="let month of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="month">
+            {{ getMonthName(month) }}
+          </option>
+        </select>
+      </div>
+  
+      <div *ngIf="filteredTransactions.length > 0; else noTransactions" class="overflow-x-auto">
+        <table class="min-w-full bg-white rounded-lg shadow-sm">
+          <thead>
+            <tr class="bg-indigo-200 text-indigo-900">
+              <th class="py-4 px-6 border-b text-left">Transaction ID</th>
+              <th class="py-4 px-6 border-b text-right">Amount</th>
+              <th class="py-4 px-6 border-b text-left">Date</th>
+              <th class="py-4 px-6 border-b text-left">Transaction From</th>
+              <th class="py-4 px-6 border-b text-left">Transaction To</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaction of filteredTransactions" class="hover:bg-indigo-50">
+              <td class="py-4 px-6 border-b text-gray-800">{{ transaction.transactionId }}</td>
+              <td class="py-4 px-6 border-b text-right text-gray-800">${{ transaction.transactionAmount }}</td>
+              <td class="py-4 px-6 border-b text-gray-800">{{ formatDate(transaction.transactionDate) }}</td>
+              <td class="py-4 px-6 border-b text-gray-800">{{ userNames[transaction.transactionFrom] || transaction.transactionFrom }}</td>
+              <td class="py-4 px-6 border-b text-gray-800">{{ userNames[transaction.transactionTo] || transaction.transactionTo }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <ng-template #noTransactions>
+        <div class="text-center text-gray-600">No transactions found.</div>
+      </ng-template>
+    </div>
+  </div>
+  

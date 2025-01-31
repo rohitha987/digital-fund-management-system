@@ -1,0 +1,40 @@
+.bg-gradient-to-r {
+    background: linear-gradient(to right, #ebf8ff, #d1fae5);
+  }
+  
+  .shadow-md {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .hover\:shadow-lg:hover {
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .transition-shadow {
+    transition: box-shadow 0.2s ease-in-out;
+  }
+  
+  .text-gray-700 {
+    color: #4a5568;
+  }
+  
+  .text-indigo-800 {
+    color: #2c5282;
+  }
+  
+  .bg-indigo-800 {
+    background-color: #2c5282;
+  }
+  
+  .bg-indigo-400 {
+    background-color: #63b3ed;
+  }
+  
+  .rounded-lg {
+    border-radius: 0.5rem;
+  }
+  
+  .hover\:bg-indigo-400:hover {
+    background-color: #63b3ed;
+  }
+  
